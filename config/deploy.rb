@@ -9,6 +9,8 @@ set :deploy_to, "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
 set :linked_files, %w{config/database.yml config/secrets.yml}
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
 
+set :passenger_restart_with_touch, false
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
