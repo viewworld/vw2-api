@@ -10,9 +10,18 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma'
 
+# File attachment
 gem 'paperclip'
+
+# Payment API
+# gem 'activemerchant'
+gem 'braintree'
+
+gem 'redis'
+gem 'redis-namespace'
+
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -27,6 +36,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'pry-rails'
   gem 'capistrano'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'

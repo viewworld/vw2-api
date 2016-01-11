@@ -46,6 +46,9 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (7.0.0)
+    bcrypt (3.1.10)
+    braintree (2.56.0)
+      builder (>= 2.0.0)
     builder (3.2.2)
     byebug (8.2.1)
     capistrano (3.4.0)
@@ -84,6 +87,7 @@ GEM
       activesupport (>= 3.0)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
+    coderay (1.1.0)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.1.x)
@@ -129,6 +133,12 @@ GEM
       mime-types
       mimemagic (= 0.3.0)
     pg (0.18.4)
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-rails (0.3.4)
+      pry (>= 0.9.10)
     puma (2.15.3)
     rack (2.0.0.alpha)
       json
@@ -162,6 +172,8 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     redis (3.2.2)
+    redis-namespace (1.5.2)
+      redis (~> 3.0, >= 3.0.4)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -178,6 +190,7 @@ GEM
       rspec-mocks (~> 3.1.0)
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
+    slop (3.6.0)
     spring (1.6.1)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
@@ -203,6 +216,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
+  braintree
   byebug
   capistrano
   capistrano-bundler
@@ -211,8 +226,11 @@ DEPENDENCIES
   capistrano-rvm
   paperclip
   pg
+  pry-rails
   puma
   rails (>= 5.0.0.beta1, < 5.1)
+  redis
+  redis-namespace
   rspec-rails
   spring
   tzinfo-data
