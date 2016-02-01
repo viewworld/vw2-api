@@ -4,7 +4,7 @@ class Api::V1::SessionsController < ApplicationController
     user_login = params[:login]
     user_password = params[:password]
 
-    user ||= User.find_by(email: user_login)
+    user = User.find_by(email: user_login)
     user ||= User.find_by(login: user_login)
 
     if user && user.authenticate(user_password)

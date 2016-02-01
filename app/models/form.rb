@@ -1,3 +1,3 @@
 class Form < ActiveRecord::Base
-  has_many :texts
+  has_many :reports
 end

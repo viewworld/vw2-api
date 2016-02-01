@@ -10,7 +10,9 @@ Rails.application.routes.draw do
       post 'sessions', to: 'sessions#create'
       delete 'sessions', to: 'sessions#destroy'
       resources :users
-      resources :forms
+      resources :forms do
+        resources :reports
+      end
     end
   end
 end

@@ -1,6 +1,9 @@
 require 'active_record'
 require 'pg'
 
+# Config for database we want to migrate to.
+# Here its necessary to expose all models we want to migrate.
+# Each model has to be ancestor of SetupDb with properly set relationships.
 module NewVW
   class SetupDb < ActiveRecord::Base
     self.abstract_class = true
@@ -15,12 +18,24 @@ module NewVW
   end
 
   class User < SetupDb
+    belongs_to :group
   end
 
   class Organisation < SetupDb
+    has_many :groups
+    has_many :users, through: :groups
+  end
+
+  class Group < SetupDb
+    :belongs_to :organisation
+  end
+
+  class Form < SetupDb
   end
 end
 
+# Config for old database we want to migrate from.
+# Configuration of each model has to match real state.
 module OldVW
   class SetupDb < ActiveRecord::Base
     self.abstract_class = true
@@ -28,16 +43,26 @@ module OldVW
       adapter: 'postgresql',
       host: 'localhost',
       port: 5432,
-      database: 'vwdb5',
-      username: 'postgres',
-      password: 'postgres123'
+      database: 'vw_production',
+      username: 'vwuser',
+      password: 'vwuserpwd'
     )
   end
 
   class User < SetupDb
+    belongs_to :group
   end
 
   class Organisation < SetupDb
+    has_many :groups
+    has_many :users, through: :groups
+  end
+
+  class Group < SetupDb
+    :belongs_to :organisation
+  end
+
+  class Form < SetupDb
   end
 end
 
@@ -107,6 +132,45 @@ module Convert
         id: organisation.id,
         name: organisation.name,
         use: organisation.use
+      }
+    end
+  end
+
+  class Groups
+    def self.single(id)
+
+    end
+
+    private
+
+    def self.paramaters_for(group)
+      {
+        id: group.id,
+        name: group.name,
+        organisation_id: group.ogranisation_id
+      }
+    end
+  end
+
+  class Forms
+    def self.single(id)
+      old_form = OldVW::Form.find(id)
+      new_parameters = parameters_for(old_form)
+
+      if new_form = NewVW::Form.find_by(id: id)
+        new_form.update_attributes(new_parameters)
+        new_form.save
+      else
+        new_form = NewVW::Form.create(new_parameters)
+        new_form.save
+      end
+    end
+
+    def self.parameters_form(form)
+      {
+        id: form.id,
+        name: form.name,
+        data: form.data
       }
     end
   end

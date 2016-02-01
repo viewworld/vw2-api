@@ -1,3 +1,3 @@
 class Text < ActiveRecord::Base
-  belongs_to :form
+  belongs_to :report
 end

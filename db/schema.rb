@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160112150701) do
+ActiveRecord::Schema.define(version: 20160201091518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 20160112150701) do
   end
 
   add_index "forms", ["data"], name: "index_forms_on_data", using: :gin
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "organisation_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "groups", ["organisation_id"], name: "index_groups_on_organisation_id", using: :btree
 
   create_table "organisations", force: :cascade do |t|
     t.string   "name"
@@ -43,15 +52,14 @@ ActiveRecord::Schema.define(version: 20160112150701) do
   add_index "reports", ["form_id"], name: "index_reports_on_form_id", using: :btree
 
   create_table "texts", force: :cascade do |t|
-    t.string   "title"
-    t.string   "hint"
-    t.string   "default_value"
-    t.integer  "form_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.jsonb    "data"
+    t.integer  "report_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  add_index "texts", ["form_id"], name: "index_texts_on_form_id", using: :btree
+  add_index "texts", ["data"], name: "index_texts_on_data", using: :gin
+  add_index "texts", ["report_id"], name: "index_texts_on_report_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
@@ -61,12 +69,16 @@ ActiveRecord::Schema.define(version: 20160112150701) do
     t.string   "password_digest"
     t.string   "timezone"
     t.integer  "role"
+    t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
+  add_index "users", ["group_id"], name: "index_users_on_group_id", using: :btree
 
+  add_foreign_key "groups", "organisations"
   add_foreign_key "reports", "forms"
-  add_foreign_key "texts", "forms"
+  add_foreign_key "texts", "reports"
+  add_foreign_key "users", "groups"
 end

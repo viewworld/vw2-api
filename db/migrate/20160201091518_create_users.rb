@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :password_digest
       t.string :timezone
       t.integer :role
+      t.references :group, index: true, foreign_key: true
 
       t.timestamps
     end
