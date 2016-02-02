@@ -1,0 +1,352 @@
+FORMAT: 1A
+HOST: http://52.31.72.139/
+
+# vw2-api
+
+The VW2-API provides a represenation of data handling for [ViewWorld](http://viewworld.net).
+We follow the RESTful principles, so the API is stateless and http methods 
+and response codes are used whenever possible.
+
+## Sessions [/sessions]
+
+### sessions#create [POST]
+Before using the API you have to authenticate yourself with valid ```login``` (name/email) and ```password```.
+JSON representation of given user with valid authentication token is returned
+if everything goes well. Each subsequent request to different API endpoints has to have
+```Authorization``` header with valid token as a value.
+
++ Request (application/json)
+
+        {
+            "login": "testuser",
+            "password": "testpassword"
+        }
+        
++ Response 201 (application/json)
+
+    + Body
+    
+            {
+                "id": 1,
+                "token": "3KeAPOuxtIFCMweJB7qLVA",
+                "email": "testuser@viewworld.net",
+                "first_name": "Test",
+                "last_name": "User"
+            }
+            
+### sessions#destroy [DELETE]
+To log out it's necessary to delete current authentication token through this endpoint.
+
++ Request
+    + Headers
+    
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+
++ Response 204
+
+## Forms Collection [/forms]
+
+### forms#index [GET]
+Collection of all availible forms.
+
++ Request
+    + Headers
+    
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+
++ Response 200 (application/json)
+
+        {
+        }
+
+## Form [/forms/{form_id}]
+
++ Parameters
+    + form_id (number) - ID of requested form.
+
+### forms#show [GET]
+JSON representation of requested form. All the ```value``` fields are filled with Reports.
+
++ Request
+    + Headers
+    
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "name": "Demo Species Observations",
+            "groups": [
+                1,
+                2,
+                3
+            ],
+            "active": true,
+            "verification": {
+                "required": true,
+                "default": "verified",
+                "report": null
+            },
+            "data": {
+                "1": {
+                    "hint": {
+                        "en": "name of species"
+                    },
+                    "type": "text",
+                    "items": {
+                        "report": null
+                    },
+                    "title": {
+                        "en": "What species did you see?"
+                    },
+                    "editable": true,
+                    "required": true
+                },
+                "2": {
+                    "hint": {
+                        "en": "Maximum file size is 8Mb."
+                    },
+                    "type": "media",
+                    "items": {
+                        "report": null
+                    },
+                    "title": {
+                        "en": "Picture of the species"
+                    },
+                    "editable": true,
+                    "required": false
+                },
+                "3": {
+                    "hint": {
+                        "en": ""
+                    },
+                    "type": "datetime",
+                    "items": {
+                        "minimum": null,
+                        "maximum": null,
+                        "report": null
+                    },
+                    "title": {
+                        "en": "Date and time"
+                    },
+                    "editable": false,
+                    "required": true
+                },
+                "4": {
+                    "hint": {
+                        "en": "lock the gps"
+                    },
+                    "type": "gps",
+                    "items": {
+                        "report": null
+                    },
+                    "title": {
+                        "en": "Where was the observation made"
+                    },
+                    "editable": true,
+                    "required": false
+                },
+                "5": {
+                    "hint": {
+                        "en": ""
+                    },
+                    "type": "numeric",
+                    "inputType": "textnumber",
+                    "items": {
+                        "minimum": 10,
+                        "maximum": 20,
+                        "default": 12.5,
+                        "report": null
+                    },
+                    "title": {
+                        "en": "Incoming moisture reading"
+                    },
+                    "editable": true,
+                    "required": false
+                },
+                "6": {
+                    "hint": {
+                        "en": ""
+                    },
+                    "type": "select",
+                    "inputType": "select",
+                    "items": {
+                        "elements": [
+                            {
+                                "label": "Mqanduli",
+                                "value": "1",
+                                "default": false
+                            },
+                            {
+                                "label": "Ncora",
+                                "value": "2",
+                                "default": false
+                            },
+                            {
+                                "label": "Lady Frere",
+                                "value": "3",
+                                "default": false
+                            },
+                            {
+                                "label": "Bizana",
+                                "value": "4",
+                                "default": false
+                            }
+                        ],
+                        "report": null
+                    },
+                    "title": {
+                        "en": "Location"
+                    },
+                    "editable": true,
+                    "required": false
+                },
+                "order": [
+                    6,
+                    5,
+                    4,
+                    3,
+                    2,
+                    1
+                ]
+            },
+            "created_at": "2016-02-01T14:20:22.990Z",
+            "updated_at": "2016-02-01T16:18:03.838Z"
+        }
+
+## Report [/reports/{report_id}]
+
++ Parameters
+    + report_id (number) - ID of requested report.
+    
+### reports#show [GET]
+
++ Request
+    + Headers
+    
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+
++ Response 200 (application/json)
+
+        {
+            "id": 1,
+            "form_id": 1,
+            "user_id": 1,
+            "timezone_name": "UTC",
+            "data": {
+                "1": {
+                    "hint": {
+                        "en": "name of species"
+                    },
+                    "type": "text",
+                    "items": {
+                        "report": "Orangutan"
+                    },
+                    "title": {
+                        "en": "What species did you see?"
+                    },
+                    "editable": true,
+                    "required": true
+                },
+                "2": {
+                    "hint": {
+                        "en": "Maximum file size is 8Mb."
+                    },
+                    "type": "media",
+                    "items": {
+                        "report": null
+                    },
+                    "title": {
+                        "en": "Picture of the species"
+                    },
+                    "editable": true,
+                    "required": false
+                },
+                "3": {
+                    "hint": {
+                        "en": ""
+                    },
+                    "type": "datetime",
+                    "items": {
+                        "minimum": null,
+                        "maximum": null,
+                        "report": 1454427309
+                    },
+                    "title": {
+                        "en": "Date and time"
+                    },
+                    "editable": false,
+                    "required": true
+                },
+                "4": {
+                    "hint": {
+                        "en": "lock the gps"
+                    },
+                    "type": "gps",
+                    "items": {
+                        "report": [50.1620006, 14.8395603]
+                    },
+                    "title": {
+                        "en": "Where was the observation made"
+                    },
+                    "editable": true,
+                    "required": false
+                },
+                "5": {
+                    "hint": {
+                        "en": ""
+                    },
+                    "type": "numeric",
+                    "inputType": "textnumber",
+                    "items": {
+                        "minimum": 10,
+                        "maximum": 20,
+                        "default": 12.5,
+                        "report": 23
+                    },
+                    "title": {
+                        "en": "Incoming moisture reading"
+                    },
+                    "editable": true,
+                    "required": false
+                },
+                "6": {
+                    "hint": {
+                        "en": ""
+                    },
+                    "type": "select",
+                    "inputType": "select",
+                    "items": {
+                        "elements": [
+                            {
+                                "label": "Mqanduli",
+                                "value": "1",
+                                "default": false,
+                                "report": true
+                            },
+                            {
+                                "label": "Ncora",
+                                "value": "2",
+                                "default": false
+                            },
+                            {
+                                "label": "Lady Frere",
+                                "value": "3",
+                                "default": false
+                            },
+                            {
+                                "label": "Bizana",
+                                "value": "4",
+                                "default": false
+                            }
+                        ],
+                    },
+                    "title": {
+                        "en": "Location"
+                    },
+                    "editable": true,
+                    "required": false
+                }
+            }
+        }
