@@ -1,16 +1,19 @@
 class Api::V1::FormsController < ApplicationController
-  # respond_to :json
+  wrap_parameters format: :json
 
+  # GET /forms
   def index
     forms = Form.all
     render json: forms, status: 200
   end
 
+  # GET /forms/:id
   def show
     form = Form.find(params[:id])
     render json: form, status: 200
   end
 
+  # POST /forms
   def create
     form = Form.create(form_params)
     if form.save
@@ -20,6 +23,7 @@ class Api::V1::FormsController < ApplicationController
     end
   end
 
+  # PATCH /forms/:id
   def update
     form = Form.find(params[:id])
     if form.update(form_params)
@@ -29,14 +33,20 @@ class Api::V1::FormsController < ApplicationController
     end
   end
 
+  # DELETE /forms/:id
+  def destroy
+  end
+
   private
 
   def form_params
     params.require(:form).permit(:name,
                                  :active,
                                  :verification,
+                                 order: [],
                                  groups: []).tap do |whitelisted|
-      whitelisted[:data] = params[:form][:data]
+      data = params[:form][:data]
+      whitelisted[:data] = data if data
     end
   end
 end

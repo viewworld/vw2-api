@@ -1,10 +1,16 @@
 class FormSerializer < ActiveModel::Serializer
-  attributes :id, :order, :data
+  attributes :id,
+             :name,
+             :active,
+             :locked,
+             :verification,
+             :groups,
+             :data
 
-#  def data
-#    input = object.data.dup
-#    input.delete('order')
-#    output = input.sort_by { |key, value| order.index(key) }
-#    output = output.to_h
-#  end
+  def verification
+    {
+      "required" => object.verification_required,
+      "default" => object.verification_default
+    }
+  end
 end

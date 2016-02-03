@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20160201091518) do
     t.boolean  "active",                default: false
     t.boolean  "verification_required", default: false
     t.string   "verification_default",  default: "verified"
+    t.boolean  "locked",                default: false
     t.text     "groups",                default: [],                      array: true
     t.text     "order",                 default: [],                      array: true
     t.datetime "created_at",                                 null: false

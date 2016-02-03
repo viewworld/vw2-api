@@ -1,5 +1,6 @@
 require 'active_record'
 require 'pg'
+require 'uuid'
 # Config for database we want to migrate to.
 # Here its necessary to expose all models we want to migrate.
 # Each model has to be ancestor of SetupDb with properly set relationships.
@@ -31,6 +32,7 @@ module NewVW
   end
 
   class Form < SetupDb
+    belongs_to :organisation
   end
 end
 
@@ -63,6 +65,8 @@ module OldVW
   end
 
   class Form < SetupDb
+    belongs_to :organisation
+    serialize :data, JSON
   end
 end
 
@@ -178,24 +182,88 @@ module Convert
   end
 
   class Forms
+    def self.all
+      old_forms = OldVW::Form.all
+      old_forms.each { |form| single(form.id) }
+      if OldVW::Form.all.size == NewVW::Form.all.size
+        true
+      else
+        false
+      end
+    end
+
     def self.single(id)
       old_form = OldVW::Form.find(id)
-      new_parameters = parameters_for(old_form)
+      old_data = old_form.data
+      old_properties = old_data['properties']
+      old_order = old_form['order']
+      new_order = []
+
+      old_pure_data = old_properties.select do |key, value|
+        UUID.validate(key)
+      end.to_a
+
+      old_pure_data = old_pure_data.each_with_index do |slice, index|
+        slice[1]['uuid'] = slice[0]
+        slice[1]['id'] = index + 1
+        slice.delete_at(0)
+      end.flatten
+
+      old_pure_data = sanitize(old_pure_data)
+
+      new_parameters = parameters_for(old_form, old_pure_data)
 
       if new_form = NewVW::Form.find_by(id: id)
         new_form.update_attributes(new_parameters)
         new_form.save
       else
-        new_form = NewVW::Form.create(new_parameters)
+        new_form = NewVW::Form.new
+        new_form.update_attributes(new_parameters)
         new_form.save
       end
     end
 
-    def self.parameters_form(form)
+    def self.sanitize(collection)
+      collection.each do |item|
+        item['type'] = item['abstractType'].downcase
+        item.delete('abstractType')
+        item['title'] = item['fieldTitle']
+        item.delete('fieldTitle')
+        item.delete('allowList')
+        item.delete('hidden')
+        item['items'].delete('items') if item['items'] && item['items']['items']
+        unless item['elements'].nil?
+          item['items']['elements'] = item['elements']
+          item.delete('elements')
+        end
+
+        if item['type'] == 'date / time'
+          item['type'] = 'datetime'
+          item['items']['minimum'] = item['minimum_picker']
+          item['items']['maximum'] = item['maximum_picker']
+          item.delete('maximum_picker')
+          item.delete('minimum_picker')
+        end
+      end
+    end
+
+    def self.parameters_for(form, old_pure_data)
+      if form.data['properties'] && form.data['properties']['verification']
+        verification_required = form.data['properties']['verification']['verificationRequired']
+      end
+
+      if form.data['properties'] && form.data['properties']['verification'] && form.data['properties']['verification']['properties'] && form.data['properties']['verification']['properties']['status']
+        default = form.data['properties']['verification']['properties']['status']['default']
+      end
+
       {
         id: form.id,
         name: form.name,
-        data: form.data
+        active: form.data['isActive'] || nil,
+        verification_required: verification_required || nil,
+        verification_default: default || nil,
+        data: old_pure_data
+        # organisation_id: form.organisation_id
       }
     end
   end
