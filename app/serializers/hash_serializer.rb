@@ -4,6 +4,14 @@ class HashSerializer
   end
 
   def self.load(hash)
-    (hash || {}).with_indifferent_access
+    input = (hash || {})
+    #output = {}
+    #input.each_pair do |key, value|
+    #  number = key.to_i
+    #  number = key if (number.to_s != key)
+    #  output.store(number, value)
+    #end
+    #output.with_indifferent_access
+    input.with_indifferent_access
   end
 end

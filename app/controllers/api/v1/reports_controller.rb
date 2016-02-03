@@ -14,8 +14,8 @@ class Api::V1::ReportsController < ApplicationController
   def create
     report = @form.reports.create(report_params)
     full_data = {}
-    report.data.each { |k, v| full_data[k]=v.merge(@form.data[k]) }
-    report.data = full_data
+    # report.data.each { |k, v| full_data[k]=v.merge(@form.data[k]) }
+    # report.data = full_data
     if report.save
       render json: report, status: 200
     else
@@ -35,7 +35,9 @@ class Api::V1::ReportsController < ApplicationController
   private
 
   def report_params
-    params.permit(:data, :form_id)
+    params.require(:report).permit(:data, :form_id).tap do |whitelisted|
+      whitelisted[:data] = params[:report][:data]
+    end
   end
 
   def find_form

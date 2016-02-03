@@ -9,7 +9,7 @@ class Api::V1::SessionsController < ApplicationController
 
     if user && user.authenticate(user_password)
       auth_token = user.set_auth_token
-      render json: user, token: auth_token, status: 200
+      render json: user, token: auth_token, status: 201
     else
       render json: { error: 'user not found' }
     end

@@ -1,4 +1,6 @@
 class Api::V1::FormsController < ApplicationController
+  # respond_to :json
+
   def index
     forms = Form.all
     render json: forms, status: 200
@@ -18,9 +20,23 @@ class Api::V1::FormsController < ApplicationController
     end
   end
 
+  def update
+    form = Form.find(params[:id])
+    if form.update(form_params)
+      render json: form, status: 200
+    else
+      render json: { errors: form.errors }, status: 422
+    end
+  end
+
   private
 
   def form_params
-    params.permit(:name, :data)
+    params.require(:form).permit(:name,
+                                 :active,
+                                 :verification,
+                                 groups: []).tap do |whitelisted|
+      whitelisted[:data] = params[:form][:data]
+    end
   end
 end

@@ -19,8 +19,13 @@ ActiveRecord::Schema.define(version: 20160201091518) do
   create_table "forms", force: :cascade do |t|
     t.string   "name"
     t.jsonb    "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "active",                default: false
+    t.boolean  "verification_required", default: false
+    t.string   "verification_default",  default: "verified"
+    t.text     "groups",                default: [],                      array: true
+    t.text     "order",                 default: [],                      array: true
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   add_index "forms", ["data"], name: "index_forms_on_data", using: :gin
@@ -28,11 +33,13 @@ ActiveRecord::Schema.define(version: 20160201091518) do
   create_table "groups", force: :cascade do |t|
     t.string   "name"
     t.integer  "organisation_id"
+    t.integer  "parent_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
   add_index "groups", ["organisation_id"], name: "index_groups_on_organisation_id", using: :btree
+  add_index "groups", ["parent_id"], name: "index_groups_on_parent_id", using: :btree
 
   create_table "organisations", force: :cascade do |t|
     t.string   "name"
@@ -53,6 +60,7 @@ ActiveRecord::Schema.define(version: 20160201091518) do
 
   create_table "texts", force: :cascade do |t|
     t.jsonb    "data"
+    t.string   "field_data"
     t.integer  "report_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -67,7 +75,7 @@ ActiveRecord::Schema.define(version: 20160201091518) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "password_digest"
-    t.string   "timezone"
+    t.string   "timezone_name"
     t.integer  "role"
     t.integer  "group_id"
     t.datetime "created_at"

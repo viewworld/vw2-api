@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :first_name
       t.string :last_name
       t.string :password_digest
-      t.string :timezone
+      t.string :timezone_name
       t.integer :role
       t.references :group, index: true, foreign_key: true
 

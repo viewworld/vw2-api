@@ -19,7 +19,17 @@ class User < ActiveRecord::Base
     auth_token
   end
 
+  ROLES = { 1 => 'sysadmin',
+            2 => 'admin',
+            3 => 'user',
+            4 => 'editor' }.freeze
+
   def has_role?(role)
+    true if role == ROLES[self.role]
+  end
+
+  def role
+    ROLES[read_attribute(:role)]
   end
 end
 
