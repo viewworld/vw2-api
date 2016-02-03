@@ -10,10 +10,12 @@ and response codes are used whenever possible.
 ## Sessions [/sessions]
 
 ### sessions#create [POST]
-Before using the API you have to authenticate yourself with valid ```login``` (name/email) and ```password```.
+Before using the API you have to authenticate yourself with valid ```login``` (name or email) and ```password```.
 JSON representation of given user with valid authentication token is returned
 if everything goes well. Each subsequent request to different API endpoints has to have
 ```Authorization``` header with valid token as a value.
+Please note that ```token``` in this and all other endpoints is only an example and for
+working with the API you have to generate your own valid ```token```.
 
 + Request (application/json)
 
@@ -77,33 +79,57 @@ JSON representation of requested form. All the ```value``` fields are filled wit
         {
             "id": 1,
             "name": "Demo Species Observations",
+            "active": true,
+            "locked": false,
             "groups": [
                 1,
                 2,
                 3
             ],
-            "active": true,
             "verification": {
                 "required": true,
                 "default": "verified",
                 "report": null
             },
-            "data": {
-                "1": {
+            "data": [
+                {
+                    "id": 5,
                     "hint": {
-                        "en": "name of species"
+                        "en": ""
                     },
-                    "type": "text",
+                    "type": "numeric",
                     "items": {
-                        "report": null
+                        "report": null,
+                        "default": 12.5,
+                        "maximum": 20,
+                        "minimum": 10
                     },
                     "title": {
-                        "en": "What species did you see?"
+                        "en": "Incoming moisture reading"
                     },
                     "editable": true,
+                    "required": false,
+                    "inputType": "textnumber"
+                },
+                {
+                    "id": 3,
+                    "hint": {
+                        "en": ""
+                    },
+                    "type": "datetime",
+                    "items": {
+                        "report": null,
+                        "maximum": null,
+                        "minimum": null
+                    },
+                    "title": {
+                        "en": "Date and time"
+                    },
+                    "editable": false,
                     "required": true
                 },
-                "2": {
+                {
+                    "id": 2,
                     "hint": {
                         "en": "Maximum file size is 8Mb."
                     },
@@ -117,23 +143,8 @@ JSON representation of requested form. All the ```value``` fields are filled wit
                     "editable": true,
                     "required": false
                 },
-                "3": {
-                    "hint": {
-                        "en": ""
-                    },
-                    "type": "datetime",
-                    "items": {
-                        "minimum": null,
-                        "maximum": null,
-                        "report": null
-                    },
-                    "title": {
-                        "en": "Date and time"
-                    },
-                    "editable": false,
-                    "required": true
-                },
-                "4": {
+                {
+                    "id": 4,
                     "hint": {
                         "en": "lock the gps"
                     },
@@ -147,31 +158,29 @@ JSON representation of requested form. All the ```value``` fields are filled wit
                     "editable": true,
                     "required": false
                 },
-                "5": {
+                {
+                    "id": 1,
                     "hint": {
-                        "en": ""
+                        "en": "name of species"
                     },
-                    "type": "numeric",
-                    "inputType": "textnumber",
+                    "type": "text",
                     "items": {
-                        "minimum": 10,
-                        "maximum": 20,
-                        "default": 12.5,
                         "report": null
                     },
                     "title": {
-                        "en": "Incoming moisture reading"
+                        "en": "What species did you see?"
                     },
                     "editable": true,
-                    "required": false
+                    "required": true
                 },
-                "6": {
+                {
+                    "id": 6,
                     "hint": {
                         "en": ""
                     },
                     "type": "select",
-                    "inputType": "select",
                     "items": {
+                        "report": null,
                         "elements": [
                             {
                                 "label": "Mqanduli",
@@ -193,24 +202,16 @@ JSON representation of requested form. All the ```value``` fields are filled wit
                                 "value": "4",
                                 "default": false
                             }
-                        ],
-                        "report": null
+                        ]
                     },
                     "title": {
                         "en": "Location"
                     },
                     "editable": true,
-                    "required": false
-                },
-                "order": [
-                    6,
-                    5,
-                    4,
-                    3,
-                    2,
-                    1
-                ]
-            },
+                    "required": false,
+                    "inputType": "select"
+                }
+            ],
             "created_at": "2016-02-01T14:20:22.990Z",
             "updated_at": "2016-02-01T16:18:03.838Z"
         }
