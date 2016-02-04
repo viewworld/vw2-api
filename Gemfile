@@ -30,6 +30,7 @@ gem 'acts_as_tree'
 gem 'rack-cors'
 
 gem 'uuid'
+gem 'responders'
 
 group :development, :test do
   gem 'rspec-rails'

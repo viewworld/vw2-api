@@ -1,35 +1,32 @@
 class Api::V1::FormsController < ApplicationController
-  wrap_parameters format: :json
+  before_action :authenticate_with_token!
+  load_and_authorize_resource
 
   # GET /forms
   def index
-    forms = Form.all
-    render json: forms, status: 200
+    render json: @forms, status: 200
   end
 
   # GET /forms/:id
   def show
-    form = Form.find(params[:id])
-    render json: form, status: 200
+    render json: @form, status: 200
   end
 
   # POST /forms
   def create
-    form = Form.create(form_params)
-    if form.save
-      render json: form, status: 201
+    if @form.save
+      render json: @form, status: 201
     else
-      render json: { errors: 'create error'}, status: 422
+      render json: { errors: @form.errors }, status: 422
     end
   end
 
   # PATCH /forms/:id
   def update
-    form = Form.find(params[:id])
-    if form.update(form_params)
-      render json: form, status: 200
+    if @form.update_attributes(form_params)
+      render json: @form, status: 200
     else
-      render json: { errors: form.errors }, status: 422
+      render json: { errors: @form.errors }, status: 422
     end
   end
 

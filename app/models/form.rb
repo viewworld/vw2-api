@@ -1,13 +1,25 @@
 class Form < ActiveRecord::Base
-  # serialize :data, HashSerializer
-  # store_accessor :data, :test
   before_save :check_or_update_order
   belongs_to :organisation
   has_many :reports
 
+  validate do |form|
+    FormDataValidator.new(form).validate
+  end
+
   # Reads order column and returns it with each element as integer.
   def order
-    read_attribute(:order).map(&:to_i)
+    stringified_order = read_attribute(:order)
+    return [] if stringified_order.nil? || stringified_order.empty?
+
+    stringified_order.map(&:to_i)
+  end
+
+  def groups
+    stringified_groups = read_attribute(:groups)
+    return [] if stringified_groups.nil? || stringified_groups.empty?
+
+    stringified_groups.map(&:to_i)
   end
 
   # Reads data column, sorts it according to corresponding order column.
@@ -15,17 +27,20 @@ class Form < ActiveRecord::Base
   # possible to call any key as symbol, eg. data[0][:id] # => 1
   def data
     unordered = read_attribute(:data)
+    return [] if unordered.nil? || unordered.empty?
+
     unordered = unordered.map { |item| item.with_indifferent_access }
+    return unordered unless unordered.size == order.size
+
     ordered = unordered.sort_by { |item| order.index(item[:id]) }
     ordered
   end
 
+  # Checks if order field and ids in data field match.
+  # Returns true if so.
+  # Fills order with ids from data field if not.
   def check_or_update_order
-    ids = []
-    self.data.each do |item|
-      ids << item[:id]
-    end
-
+    ids = self.data.map { |item| item[:id] }
     return true if ids.sort == order.sort
 
     self.order = ids

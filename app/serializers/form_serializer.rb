@@ -1,6 +1,7 @@
 class FormSerializer < ActiveModel::Serializer
   attributes :id,
              :name,
+             :order,
              :active,
              :locked,
              :verification,

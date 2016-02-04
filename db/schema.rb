@@ -25,11 +25,13 @@ ActiveRecord::Schema.define(version: 20160201091518) do
     t.boolean  "locked",                default: false
     t.text     "groups",                default: [],                      array: true
     t.text     "order",                 default: [],                      array: true
+    t.integer  "organisation_id"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
   end
 
   add_index "forms", ["data"], name: "index_forms_on_data", using: :gin
+  add_index "forms", ["organisation_id"], name: "index_forms_on_organisation_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -86,6 +88,7 @@ ActiveRecord::Schema.define(version: 20160201091518) do
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["group_id"], name: "index_users_on_group_id", using: :btree
 
+  add_foreign_key "forms", "organisations"
   add_foreign_key "groups", "organisations"
   add_foreign_key "reports", "forms"
   add_foreign_key "texts", "reports"

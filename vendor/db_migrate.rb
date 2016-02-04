@@ -24,6 +24,7 @@ module NewVW
   class Organisation < SetupDb
     has_many :groups
     has_many :users, through: :groups
+    has_many :forms
   end
 
   class Group < SetupDb
@@ -194,24 +195,23 @@ module Convert
 
     def self.single(id)
       old_form = OldVW::Form.find(id)
-      old_data = old_form.data
-      old_properties = old_data['properties']
-      old_order = old_form['order']
-      new_order = []
+      old_properties = old_form.data['properties']
+      old_order = old_form.data['order']
 
-      old_pure_data = old_properties.select do |key, value|
+      pure_data = old_properties.select do |key, value|
         UUID.validate(key)
       end.to_a
 
-      old_pure_data = old_pure_data.each_with_index do |slice, index|
+      pure_data = pure_data.each_with_index do |slice, index|
         slice[1]['uuid'] = slice[0]
         slice[1]['id'] = index + 1
         slice.delete_at(0)
       end.flatten
 
-      old_pure_data = sanitize(old_pure_data)
+      pure_data = sanitize(pure_data)
+      new_order = id_order(pure_data, old_order)
 
-      new_parameters = parameters_for(old_form, old_pure_data)
+      new_parameters = parameters_for(old_form, pure_data, new_order)
 
       if new_form = NewVW::Form.find_by(id: id)
         new_form.update_attributes(new_parameters)
@@ -221,6 +221,15 @@ module Convert
         new_form.update_attributes(new_parameters)
         new_form.save
       end
+    end
+
+    def self.id_order(pure_data, uuid_order)
+      order = []
+      uuid_order.each do |uuid|
+        data_field = pure_data.select { |field| field['uuid'] == uuid }.first
+        order << data_field['id'] if data_field
+      end
+      order
     end
 
     def self.sanitize(collection)
@@ -238,16 +247,27 @@ module Convert
         end
 
         if item['type'] == 'date / time'
-          item['type'] = 'datetime'
+          item['type'] = 'date_time'
           item['items']['minimum'] = item['minimum_picker']
           item['items']['maximum'] = item['maximum_picker']
           item.delete('maximum_picker')
           item.delete('minimum_picker')
         end
+
+        if item['type'] == 'yes / no'
+          item['type'] = 'yes_no'
       end
     end
 
-    def self.parameters_for(form, old_pure_data)
+    def self.new_organisation_for(form)
+      if new_organisation = NewVW::Organisation.find_by(id: form.organisation_id)
+        return new_organisation.id
+      else
+        return nil
+      end
+    end
+
+    def self.parameters_for(form, pure_data, order)
       if form.data['properties'] && form.data['properties']['verification']
         verification_required = form.data['properties']['verification']['verificationRequired']
       end
@@ -256,14 +276,17 @@ module Convert
         default = form.data['properties']['verification']['properties']['status']['default']
       end
 
+
       {
         id: form.id,
         name: form.name,
         active: form.data['isActive'] || nil,
         verification_required: verification_required || nil,
         verification_default: default || nil,
-        data: old_pure_data
-        # organisation_id: form.organisation_id
+        order: order,
+        data: pure_data,
+        groups: form.data['groups'] || nil,
+        organisation_id: new_organisation_for(form)
       }
     end
   end

@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
 
+  respond_to :json
+
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -33,7 +35,8 @@ class ApplicationController < ActionController::Base
 
   def authenticate_with_token!
     unless current_user.present?
-      render json: { errors: "not authenticated" }, status: 401
+      render json: { errors: "You are not authenticated." }, status: 401
     end
   end
 end
+

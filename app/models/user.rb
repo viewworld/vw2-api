@@ -1,8 +1,9 @@
 class User < ActiveRecord::Base
   before_save { self.email = email.downcase }
-  after_save :set_default_role
+  # after_save :set_default_role
 
   belongs_to :group
+  delegate :organisation, to: :group, allow_nil: true
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, presence: true, length: { in: 4..150 },
@@ -24,12 +25,24 @@ class User < ActiveRecord::Base
             3 => 'user',
             4 => 'editor' }.freeze
 
-  def has_role?(role)
-    true if role == ROLES[self.role]
-  end
-
   def role
     ROLES[read_attribute(:role)]
+  end
+
+  def sysadmin?
+    true if self.role == 'sysadmin'
+  end
+
+  def admin?
+    true if self.role == 'admin'
+  end
+
+  def user?
+    true if self.role == 'user'
+  end
+
+  def editor?
+    true if self.role == 'editor'
   end
 end
 
