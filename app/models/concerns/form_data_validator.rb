@@ -10,6 +10,15 @@ class FormDataValidator < ActiveModel::Validator
              "one or more 'editable' fields are in wrong format.",
              "one or more 'required' fields are in wrong format." ]
 
+  ALLOWED_TYPES = %w( text
+                      media
+                      select
+                      numeric
+                      date_time
+                      yes_no
+                      gps
+                      metadata )
+
   def validate
     @form.errors[:base] << ERRORS[0] unless all_fields_contains_id?
     @form.errors[:base] << ERRORS[1] unless all_id_fields_are_numeric?
@@ -33,15 +42,7 @@ class FormDataValidator < ActiveModel::Validator
   end
 
   def all_fields_are_of_allowed_type?
-    allowed_types = %w(text
-                       media
-                       select
-                       numeric
-                       date_time
-                       yes_no
-                       gps
-                       metadata)
-    @form.data.select { |field| !allowed_types.include?(field[:type]) }.empty?
+    @form.data.select { |field| !ALLOWED_TYPES.include?(field[:type]) }.empty?
   end
 
   def all_fields_contains_editable_boolean?

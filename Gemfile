@@ -8,7 +8,8 @@ gem 'pg', '~> 0.15'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'active_model_serializers', '~> 0.10.0.rc3'
+# gem 'active_model_serializers', '~> 0.10.0.rc4'
+gem 'active_model_serializers'
 
 gem 'cancancan'
 # gem 'rolify'
@@ -31,6 +32,7 @@ gem 'rack-cors'
 
 gem 'uuid'
 gem 'responders'
+gem 'paranoia'
 
 group :development, :test do
   gem 'rspec-rails'

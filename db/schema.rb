@@ -25,12 +25,14 @@ ActiveRecord::Schema.define(version: 20160201091518) do
     t.boolean  "locked",                default: false
     t.text     "groups",                default: [],                      array: true
     t.text     "order",                 default: [],                      array: true
+    t.datetime "deleted_at"
     t.integer  "organisation_id"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
   end
 
   add_index "forms", ["data"], name: "index_forms_on_data", using: :gin
+  add_index "forms", ["deleted_at"], name: "index_forms_on_deleted_at", using: :btree
   add_index "forms", ["organisation_id"], name: "index_forms_on_organisation_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
@@ -79,7 +81,7 @@ ActiveRecord::Schema.define(version: 20160201091518) do
     t.string   "last_name"
     t.string   "password_digest"
     t.string   "timezone_name"
-    t.integer  "role"
+    t.integer  "role",            default: 3
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"

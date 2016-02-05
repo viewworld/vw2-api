@@ -32,6 +32,11 @@ class Api::V1::FormsController < ApplicationController
 
   # DELETE /forms/:id
   def destroy
+    if @form.destroy
+      head 204
+    else
+      render json: { errors: 'Cannot destroy this form.' }, status: 422
+    end
   end
 
   private

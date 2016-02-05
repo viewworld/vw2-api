@@ -1,4 +1,5 @@
 class Form < ActiveRecord::Base
+  acts_as_paranoid
   before_save :check_or_update_order
   belongs_to :organisation
   has_many :reports
@@ -16,10 +17,10 @@ class Form < ActiveRecord::Base
   end
 
   def groups
-    stringified_groups = read_attribute(:groups)
-    return [] if stringified_groups.nil? || stringified_groups.empty?
+    str_groups = read_attribute(:groups)
+    return [] if str_groups.nil? || str_groups.empty?
 
-    stringified_groups.map(&:to_i)
+    int_groups = str_groups.map(&:to_i)
   end
 
   # Reads data column, sorts it according to corresponding order column.

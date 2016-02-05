@@ -9,6 +9,7 @@ class CreateForms < ActiveRecord::Migration
       t.boolean :locked, default: false
       t.text :groups, array: true, default: []
       t.text :order, array: true, default: []
+      t.datetime :deleted_at, index: true
       t.references :organisation, index: true, foreign_key: true
 
       t.timestamps null: false
