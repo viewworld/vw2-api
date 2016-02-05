@@ -49,7 +49,11 @@ To log out it's necessary to delete current authentication token through this en
 ## Forms Collection [/forms]
 
 ### forms#index [GET]
-Collection of all availible forms.
+Collection of all availible forms scoped to currently signed in user.
+So only forms associated to same Organisation as a User are listed.
+> Accessible by: 
+> ```Sysadmin```,
+> ```Admin```
 
 + Request
     + Headers
@@ -58,8 +62,188 @@ Collection of all availible forms.
 
 + Response 200 (application/json; charset=utf-8)
 
-        {
-        }
+        [
+            {
+                "id":1408,
+                "name":"Little sun",
+                "data":[
+                    {
+                        "id":2,
+                        "title":{
+                            "en":"Hvornår blev den solgt"
+                        }
+                    },
+                    {
+                        "id":1,
+                        "title":{
+                            "en":"Antal solgte lamper"
+                        }
+                    },
+                    {
+                        "id":3,
+                        "title":{
+                            "en":"Hvor er vi?"
+                        }
+                    },
+                    {
+                        "id":4,
+                        "title":{
+                            "en":"Username"
+                        }
+                    },
+                    {
+                        "id":5,
+                        "title":{
+                            "en":"Hvad er dit estimerede lager"
+                        }
+                    },
+                    {
+                        "id":6,
+                        "title":{
+                            "en":"Hvordan er den solgt"
+                        }
+                    },
+                    {
+                        "id":7,
+                        "title":{
+                            "en":"If credit down payment"
+                        }
+                    },
+                    {
+                        "id":8,
+                        "title":{
+                            "en":"Slutkunde navn"
+                        }
+                    },
+                    {
+                        "id":9,
+                        "title":{
+                            "en":"slutkunde telefon nummer"
+                        }
+                    },
+                    {
+                        "id":10,
+                        "title":{
+                            "en":"Date"
+                        }
+                    },
+                    {
+                        "id":11,
+                        "title":{
+                            "en":"Billede af modtager"
+                        }
+                    },
+                    {
+                        "id":12,
+                        "title":{
+                            "en":"Stregkode"
+                        }
+                    }
+                ]
+            },
+            {
+                "id":2284,
+                "name":"Flowers in the village",
+                "data":[
+                    {
+                        "id":1,
+                        "title":{
+                            "en":"Describe the flower"
+                        }
+                    },
+                    {
+                        "id":6,
+                        "title":{
+                            "en":"How many different colours does the flower have?"
+                        }
+                    },
+                    {
+                        "id":2,
+                        "title":{
+                            "en":"GPS Location"
+                        }
+                    },
+                    {
+                        "id":3,
+                        "title":{
+                            "en":"In which district?"
+                        }
+                    },
+                    {
+                        "id":4,
+                        "title":{
+                            "en":"Date and Time of observation"
+                        }
+                    },
+                    {
+                        "id":5,
+                        "title":{
+                            "en":"Take a picture of the flower"
+                        }
+                    }
+                ]
+            },
+            {
+                "id":12,
+                "name":"Species observation",
+                "data":[
+                    {
+                        "id":1,
+                        "title":{
+                            "en":"What species did you see?"
+                        }
+                    },
+                    {
+                        "id":5,
+                        "title":{
+                            "en":"Number of individuals"
+                        }
+                    },
+                    {
+                        "id":2,
+                        "title":{
+                            "en":"Where was the observation made"
+                        }
+                    },
+                    {
+                        "id":9,
+                        "title":{
+                            "en":"Et billede mere"
+                        }
+                    },
+                    {
+                        "id":3,
+                        "title":{
+                            "en":"Did you get a picture?"
+                        }
+                    },
+                    {
+                        "id":4,
+                        "title":{
+                            "en":"Did you observe alone?"
+                        }
+                    },
+                    {
+                        "id":6,
+                        "title":{
+                            "en":"User"
+                        }
+                    },
+                    {
+                        "id":7,
+                        "title":{
+                            "en":"Timestamp"
+                        }
+                    },
+                    {
+                        "id":8,
+                        "title":{
+                            "en":"Date/time"
+                        }
+                    }
+                ]
+            }
+        ]
 
 ## Form [/forms/{form_id}]
 
@@ -67,7 +251,10 @@ Collection of all availible forms.
     + form_id:12 (number) - ID of requested form.
 
 ### forms#show [GET]
-JSON representation of requested form. All the ```value``` fields are filled with Reports.
+JSON representation of requested form. Object in data array are ordered according to ```order``` field.
+```order``` field is accesible only during ```POST``` and ```PATCH```.
+All members of ```groups``` array has optional ```associated``` value.
+For users,h form is visible only if  it has set ```associated: true``` to the same Group as given User.
 
 + Request
     + Headers
