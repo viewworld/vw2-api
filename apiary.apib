@@ -192,32 +192,24 @@ JSON representation of requested form. All the ```value``` fields are filled wit
                     "items": {
                         "type": "object",
                         "required": false,
-                    "properties": {
-                        "file": {
-                            "type": "string",
-                            "required": false,
-                            "minLength": 1
-                        },
-                        "size": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "required": false
-                        },
-                        "assetId": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "required": false
+                        "properties": {
+                            "file": {
+                                "type": "string",
+                                "required": false,
+                                "minLength": 1
+                            },
+                            "size": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "required": false
+                            },
+                            "assetId": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "required": false
+                            }
                         }
                     }
-                },
-                {
-                    "title": {
-                        "en": "Did you get a picture?"
-                    },
-                    "editable": true,
-                    "required": false,
-                    "inputType": "uploadImage",
-                    "includedInFeed": true
                 },
                 {
                     "id": 4,
