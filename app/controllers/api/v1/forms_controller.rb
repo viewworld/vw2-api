@@ -4,7 +4,9 @@ class Api::V1::FormsController < ApplicationController
 
   # GET /forms
   def index
-    render json: @forms, status: 200
+    render json: @forms,
+           status: 200,
+           each_serializer: FormsSerializer
   end
 
   # GET /forms/:id
@@ -52,3 +54,4 @@ class Api::V1::FormsController < ApplicationController
     end
   end
 end
+

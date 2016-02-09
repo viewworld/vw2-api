@@ -8,7 +8,7 @@ class Form < ActiveRecord::Base
     FormDataValidator.new(form).validate
   end
 
-  # Reads order column and returns it with each element as integer.
+  # Reads order column and returns it with each element as an integer.
   def order
     stringified_order = read_attribute(:order)
     return [] if stringified_order.nil? || stringified_order.empty?
@@ -16,6 +16,7 @@ class Form < ActiveRecord::Base
     stringified_order.map(&:to_i)
   end
 
+  # Reads group column and returns it with each element as an integer.
   def groups
     str_groups = read_attribute(:groups)
     return [] if str_groups.nil? || str_groups.empty?
@@ -33,8 +34,7 @@ class Form < ActiveRecord::Base
     unordered = unordered.map { |item| item.with_indifferent_access }
     return unordered unless unordered.size == order.size
 
-    ordered = unordered.sort_by { |item| order.index(item[:id]) }
-    ordered
+    unordered.sort_by { |item| order.index(item[:id]) }
   end
 
   # Checks if order field and ids in data field match.
@@ -45,6 +45,12 @@ class Form < ActiveRecord::Base
     return true if ids.sort == order.sort
 
     self.order = ids
+  end
+
+  # Lists only id and title from each data item.
+  def simple_data
+    unordered = self.data.map { |item| item.slice(:id, :title, :type) }
+    unordered.sort_by { |item| order.index(item[:id]) }
   end
 end
 

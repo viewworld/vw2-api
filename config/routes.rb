@@ -1,9 +1,8 @@
 require 'api_constraints'
 
 Rails.application.routes.draw do
-  #get '/404' => 'errors#not_found'
-#  get '/403' => 'errors#access_denied'
-  #get '/500' => 'errors#exception'
+  get '/404' => 'errors#not_found'
+  get '/500' => 'errors#exception'
 
   scope module: :api do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do

@@ -1,7 +1,6 @@
 class Report < ActiveRecord::Base
   belongs_to :form
-  has_many :texts
-  serialize :data, ArraySerializer
+  delegate :organisation, to: :form, allow_nil: true
 
   # Returns associated Form filled with Report's data values.
   # Each report field in Form's data JSON is filled with particular
@@ -11,7 +10,7 @@ class Report < ActiveRecord::Base
     filled_data = self.form.data
     filled_data.each do |form_item|
       report_value = report_data.select do |report_item|
-        report_item.keys.first == form_item[:id]
+        report_item.keys.first.to_i == form_item[:id]
       end
 
       if report_value.nil? || report_value.empty?

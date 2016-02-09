@@ -12,7 +12,7 @@ class ArraySerializer
         numeric_id = key if (numeric_id.to_s != key)
         output.store(numeric_id, value)
       end
-      hash = output
+      output
     end
     array
   end

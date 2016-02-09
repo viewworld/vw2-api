@@ -1,0 +1,27 @@
+reporter: apiary
+custom:
+  apiaryApiKey: 589ad18d094312ca660c667afcde5a29
+  apiaryApiName: vw2api
+dry-run: null
+hookfiles: null
+language: ruby
+sandbox: false
+server: bundle exec rails server
+server-wait: 3
+init: false
+names: false
+only: []
+output: []
+header: []
+sorted: false
+user: null
+inline-errors: false
+details: false
+method: []
+color: true
+level: info
+timestamp: false
+silent: false
+path: []
+blueprint: apiary.apib
+endpoint: 'http://localhost:3000'

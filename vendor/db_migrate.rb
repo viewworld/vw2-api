@@ -30,19 +30,10 @@ module NewVW
   class Group < SetupDb
     belongs_to :organisation
     has_many :users
-    has_many :groupins
-    has_many :forms, through: :groupins
   end
 
   class Form < SetupDb
     belongs_to :organisation
-    has_many :groupins
-    has_many :groups, through: :groupins
-  end
-
-  class Groupin < SetupDb
-    belongs_to :form
-    belongs_to :group
   end
 end
 
@@ -206,7 +197,6 @@ module Convert
       old_form = OldVW::Form.find(id)
       old_properties = old_form.data['properties']
       old_order = old_form.data['order']
-      old_groups = old_form.data['groups']
 
       pure_data = old_properties.select do |key, value|
         UUID.validate(key)
@@ -230,16 +220,6 @@ module Convert
         new_form = NewVW::Form.new
         new_form.update_attributes(new_parameters)
         new_form.save
-      end
-      set_groupins(new_form, old_groups)
-    end
-
-    def self.set_groupins(form, groups)
-      groups.each do |id|
-        if group = NewVW::Group.find_by(id: id)
-          form.groups << group
-        end
-        form.save
       end
     end
 
@@ -306,6 +286,7 @@ module Convert
         verification_default: default || nil,
         order: order,
         data: pure_data,
+        groups: form.data['groups'] || nil,
         deleted_at: form.deleted_at,
         organisation_id: new_organisation_for(form)
       }

@@ -27,6 +27,10 @@ class ApplicationController < ActionController::Base
     render json: { error: error.message }, status: :not_found
   end
 
+  def default_serializer_options
+    { root: false }
+  end
+
   def current_user
     if user_id = $redis.hget(request.headers['Authorization'], 'User_id')
       @current_user ||= User.find_by(id: user_id)

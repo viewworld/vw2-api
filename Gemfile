@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
 
@@ -27,12 +27,15 @@ gem 'redis-namespace'
 # parent-children relationship
 gem 'acts_as_tree'
 
+gem 'dredd_hooks'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
 gem 'uuid'
 gem 'responders'
 gem 'paranoia'
+
+gem 'appsignal'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -41,6 +44,8 @@ group :development, :test do
 end
 
 group :development do
+  gem 'rubocop'
+  gem 'brakeman', require: false
   gem 'pry-rails'
   gem 'capistrano'
   gem 'capistrano-bundler'
