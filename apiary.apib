@@ -810,9 +810,56 @@ For users form is visible only if  it has set ```associated: true``` to the same
         }
         
 
-## Report [/reports/{report_id}]
+## Reports [/forms/{form_id}/reports]
 
 + Parameters
+    + form_id:12 (number) - ID of form associated with report.
+    
+### reports#index [GET]
+
++ Request
+    + Headers
+    
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+
++ Response 200 (application/json; charset=utf-8)
+
+
+### reports#create [POST]
+
++ Request (application/json)
+    + Headers
+    
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+            
+    + Body
+    
+            {
+                "data": [
+                    {"1": "tiger"},
+                    {"2": "lion"}
+                ]
+            }
+
++ Response 201 (application/json; charset=utf-8)
+
+            {
+                "id": 2,
+                "form_id": 2315,
+                "data": [
+                    {
+                        "1": "tiger"
+                    },
+                    {
+                        "2": "lion"
+                    }
+                ]
+            }
+
+## Report [/forms/{form_id}/reports/{report_id}]
+
++ Parameters
+    + form_id:12 (number) - ID of form associated with report.
     + report_id:1 (number) - ID of requested report.
     
 ### reports#show [GET]
