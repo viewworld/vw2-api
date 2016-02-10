@@ -23,6 +23,8 @@ class Report < ActiveRecord::Base
 
       if report_value.nil? || report_value.empty?
         report_value
+      elsif form_item[:type] == 'media'
+        report_value = serialized_report_file(report_value.first.values.first)
       else
         report_value = report_value.first.values.first
       end
@@ -44,5 +46,13 @@ class Report < ActiveRecord::Base
     collection.sort_by do |item|
       real_order.index(item.keys.first)
     end
+  end
+
+  def serialized_report_file(id)
+    report_file = ReportFile.find_by_id(id)
+    serialized = { name: report_file.file_file_name,
+                   content_type: report_file.file_content_type,
+                   url: report_file.file.url }
+    return serialized
   end
 end

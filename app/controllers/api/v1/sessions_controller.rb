@@ -11,7 +11,7 @@ class Api::V1::SessionsController < ApplicationController
       auth_token = user.set_auth_token
       render json: user, token: auth_token, status: 201
     else
-      render json: { error: 'user not found' }
+      render json: { errors: 'session create error' }
     end
   end
 

@@ -24,8 +24,7 @@ class FormDataValidator < ActiveModel::Validator
     @form.errors[:base] << ERRORS[1] unless all_id_fields_are_numeric?
     @form.errors[:base] << ERRORS[2] unless all_id_fields_are_unique?
     @form.errors[:base] << ERRORS[3] unless all_fields_are_of_allowed_type?
-    @form.errors[:base] << ERRORS[4] unless all_fields_contains_editable_boolean?
-    @form.errors[:base] << ERRORS[5] unless all_fields_contains_required_boolean?
+    @form.errors[:base] << ERRORS[4] unless all_fields_contains_editable_boolean? @form.errors[:base] << ERRORS[5] unless all_fields_contains_required_boolean?
   end
 
   def all_fields_contains_id?

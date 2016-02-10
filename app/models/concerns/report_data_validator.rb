@@ -44,5 +44,7 @@ class ReportDataValidator
     return true unless truth_table.include?(false)
   end
 
-  ALLOWED_TYPES = { string: 'text' }
+  ALLOWED_TYPES = { string: 'text',
+                    array: 'gps',
+                    fixnum: 'media' }
 end
