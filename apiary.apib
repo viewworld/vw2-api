@@ -871,124 +871,40 @@ For users form is visible only if  it has set ```associated: true``` to the same
 
 + Response 200 (application/json; charset=utf-8)
 
-        {
-            "id": 1,
-            "form_id": 1,
-            "user_id": 1,
-            "timezone_name": "UTC",
-            "data": {
-                "1": {
-                    "hint": {
-                        "en": "name of species"
+            {
+                "id":15,
+                "form_id":2318,
+                "data":[
+                    {
+                        "id":1,
+                        "hint": "name of species",
+                        "type":"text",
+                        "report":"tiger",
+                        "title": "What species did you see?",
+                        "editable":true,
+                        "required":true
                     },
-                    "type": "text",
-                    "items": {
-                        "report": "Orangutan"
+                    {
+                        "id":2,
+                        "hint": "name of species",
+                        "type":"text",
+                        "report":"true",
+                        "title": "What species did you see?",
+                        "editable":true,
+                        "required":true
                     },
-                    "title": {
-                        "en": "What species did you see?"
-                    },
-                    "editable": true,
-                    "required": true
-                },
-                "2": {
-                    "hint": {
-                        "en": "Maximum file size is 8Mb."
-                    },
-                    "type": "media",
-                    "items": {
-                        "report": null
-                    },
-                    "title": {
-                        "en": "Picture of the species"
-                    },
-                    "editable": true,
-                    "required": false
-                },
-                "3": {
-                    "hint": {
-                        "en": ""
-                    },
-                    "type": "datetime",
-                    "items": {
-                        "minimum": null,
-                        "maximum": null,
-                        "report": 1454427309
-                    },
-                    "title": {
-                        "en": "Date and time"
-                    },
-                    "editable": false,
-                    "required": true
-                },
-                "4": {
-                    "hint": {
-                        "en": "lock the gps"
-                    },
-                    "type": "gps",
-                    "items": {
-                        "report": [50.1620006, 14.8395603]
-                    },
-                    "title": {
-                        "en": "Where was the observation made"
-                    },
-                    "editable": true,
-                    "required": false
-                },
-                "5": {
-                    "hint": {
-                        "en": ""
-                    },
-                    "type": "numeric",
-                    "inputType": "textnumber",
-                    "items": {
-                        "minimum": 10,
-                        "maximum": 20,
-                        "default": 12.5,
-                        "report": 23
-                    },
-                    "title": {
-                        "en": "Incoming moisture reading"
-                    },
-                    "editable": true,
-                    "required": false
-                },
-                "6": {
-                    "hint": {
-                        "en": ""
-                    },
-                    "type": "select",
-                    "inputType": "select",
-                    "items": {
-                        "elements": [
-                            {
-                                "label": "Mqanduli",
-                                "value": "1",
-                                "default": false,
-                                "report": true
-                            },
-                            {
-                                "label": "Ncora",
-                                "value": "2",
-                                "default": false
-                            },
-                            {
-                                "label": "Lady Frere",
-                                "value": "3",
-                                "default": false
-                            },
-                            {
-                                "label": "Bizana",
-                                "value": "4",
-                                "default": false
-                            }
-                        ],
-                    },
-                    "title": {
-                        "en": "Location"
-                    },
-                    "editable": true,
-                    "required": false
-                }
+                    {
+                        "id":3,
+                        "hint": "fileupload",
+                        "type":"media",
+                        "report":{
+                            "name":"fp.jpg",
+                            "content_type":"image/jpeg",
+                            "url":"/files/16/original/fp.jpg?1455108639"
+                        },
+                        "title": "upload file?",
+                        "editable":true,
+                        "required":true
+                    }
+                ]
             }
-        }
