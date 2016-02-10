@@ -2,6 +2,14 @@ class Report < ActiveRecord::Base
   belongs_to :form
   delegate :organisation, to: :form, allow_nil: true
 
+  validate do |report|
+    ReportDataValidator.new(report).validate
+  end
+
+  def pure_data
+    read_attribute(:data)
+  end
+
   # Returns associated Form filled with Report's data values.
   # Each report field in Form's data JSON is filled with particular
   # Report's data value (if present).

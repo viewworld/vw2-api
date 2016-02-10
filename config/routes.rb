@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :users
       resources :forms do
         resources :reports
+        resources :report_files, only: [:show, :create]
       end
     end
   end

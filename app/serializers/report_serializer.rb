@@ -6,10 +6,4 @@ class ReportSerializer < ActiveModel::Serializer
     data.delete('order')
     data
   end
-
-#  def data
-#    form_data.each do |point, payload|
-#      payload[:items][:report] = object.data[point]
-#    end
-#  end
 end
