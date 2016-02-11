@@ -21,7 +21,7 @@ class Form < ActiveRecord::Base
     str_groups = read_attribute(:groups)
     return [] if str_groups.nil? || str_groups.empty?
 
-    int_groups = str_groups.map(&:to_i)
+    str_groups.map(&:to_i)
   end
 
   # Reads data column, sorts it according to corresponding order column.

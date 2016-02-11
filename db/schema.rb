@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160210090936) do
+ActiveRecord::Schema.define(version: 20160211135059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,17 +72,6 @@ ActiveRecord::Schema.define(version: 20160210090936) do
   add_index "reports", ["data"], name: "index_reports_on_data", using: :gin
   add_index "reports", ["form_id"], name: "index_reports_on_form_id", using: :btree
 
-  create_table "texts", force: :cascade do |t|
-    t.jsonb    "data"
-    t.string   "field_data"
-    t.integer  "report_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "texts", ["data"], name: "index_texts_on_data", using: :gin
-  add_index "texts", ["report_id"], name: "index_texts_on_report_id", using: :btree
-
   create_table "users", force: :cascade do |t|
     t.string   "email"
     t.string   "login"
@@ -90,10 +79,11 @@ ActiveRecord::Schema.define(version: 20160210090936) do
     t.string   "last_name"
     t.string   "password_digest"
     t.string   "timezone_name"
-    t.integer  "role",            default: 3
+    t.integer  "role",                  default: 3
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "braintree_customer_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
@@ -102,6 +92,5 @@ ActiveRecord::Schema.define(version: 20160210090936) do
   add_foreign_key "forms", "organisations"
   add_foreign_key "groups", "organisations"
   add_foreign_key "reports", "forms"
-  add_foreign_key "texts", "reports"
   add_foreign_key "users", "groups"
 end

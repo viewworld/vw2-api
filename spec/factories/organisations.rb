@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :organisation do
-    name "MyString"
-use "MyString"
+    name "RERA"
+    use "project_monitoring"
   end
-
 end

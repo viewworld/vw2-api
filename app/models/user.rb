@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 
   belongs_to :group
   delegate :organisation, to: :group, allow_nil: true
+  delegate :forms, to: :organisation, allow_nil: true
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, presence: true, length: { in: 4..150 },
@@ -43,6 +44,10 @@ class User < ActiveRecord::Base
 
   def editor?
     true if self.role == 'editor'
+  end
+
+  def has_payment_info?
+    braintree_customer_id
   end
 end
 

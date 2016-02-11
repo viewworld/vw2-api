@@ -13,6 +13,11 @@ Rails.application.routes.draw do
         resources :reports
         resources :report_files, only: [:show, :create]
       end
+      resources :transactions, only: :create
+      resources :organisations do
+        resource :subscribtion, only: [:show, :create, :destroy]
+      end 
+      post 'subscribtion_status' => 'subscribtion_statuses#create'
     end
   end
 end

@@ -198,10 +198,12 @@ module Convert
       old_properties = old_form.data['properties']
       old_order = old_form.data['order']
 
+      # Array of form fields
       pure_data = old_properties.select do |key, value|
         UUID.validate(key)
       end.to_a
 
+      # Deletes UUID keys, adds id and uuid as values inside.
       pure_data = pure_data.each_with_index do |slice, index|
         slice[1]['uuid'] = slice[0]
         slice[1]['id'] = index + 1
@@ -236,11 +238,15 @@ module Convert
       collection.each do |item|
         item['type'] = item['abstractType'].downcase
         item.delete('abstractType')
-        item['title'] = item['fieldTitle']
+        item.delete('inputType')
+        item['title'] = item['fieldTitle'].values.first
+        item['hint'] = item['hint'].values.first
         item.delete('fieldTitle')
         item.delete('allowList')
         item.delete('hidden')
+        item.delete('uuid')
         item['items'].delete('items') if item['items'] && item['items']['items']
+        item['items'].delete('type') if item['items'] && item['items']['type']
         unless item['elements'].nil?
           item['items']['elements'] = item['elements']
           item.delete('elements')
@@ -256,6 +262,15 @@ module Convert
 
         if item['type'] == 'yes / no'
           item['type'] = 'yes_no'
+        end
+
+        if item['type'] == 'explanation text'
+          item['type'] = 'explanation_text'
+          item['items']['report'] = item['fieldContent']
+        end
+
+        if item['type'] == 'page break'
+          item['type'] = 'page_break'
         end
       end
     end

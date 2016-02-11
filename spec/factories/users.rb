@@ -4,5 +4,6 @@ FactoryGirl.define do
     password 'password'
     password_confirmation 'password'
     role 3
+    group
   end
 end
