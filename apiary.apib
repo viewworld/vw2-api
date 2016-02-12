@@ -908,3 +908,82 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     }
                 ]
             }
+            
+## ReportFiles [/forms/{form_id}/report_files]
+
++ Parameters
+    + form_id:12 (number) - ID of form associated with report.
+    
+
+### report_files#create [POST]
+
++ Request (application/json)
+    + Headers
+    
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+            
+    + Body
+    
+            {
+                "data": [
+                    {"1": "tiger"},
+                    {"2": "lion"}
+                ]
+            }
+
++ Response 200 (application/json; charset=utf-8)
+
+## Subscribtion [/organisations/{organisation_id}/subscribtion]
+
++ Parameters
+    + organisation_id:3 (number) - ID of organisation
+    
+
+### subscribtions#show [GET]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "id":"54468038",
+            "email":"ivnsnk.cz@gmail.com",
+            "first_name":"2test_first_name2",
+            "last_name":"2test_last_name2",
+            "phone":"123456789",
+            "credit_cards":[
+                {
+                    "id":"kkndg6",
+                    "default":false,
+                    "last_4":"1881",
+                    "expiration_date":"12/2020",
+                    "expiration_month":"12",
+                    "expiration_year":"2020",
+                    "token":"kkndg6",
+                    "image_url":"https://assets.braintreegateway.com/payment_method_logo/visa.png?environment=sandbox"
+                },
+                {
+                    "id":"6jvmhb",
+                    "default":false,
+                    "last_4":"1881",
+                    "expiration_date":"12/2020",
+                    "expiration_month":"12",
+                    "expiration_year":"2020",
+                    "token":"6jvmhb",
+                    "image_url":"https://assets.braintreegateway.com/payment_method_logo/visa.png?environment=sandbox"
+                },
+                {
+                    "id":"kj44cw",
+                    "default":true,
+                    "last_4":"1881",
+                    "expiration_date":"12/2020",
+                    "expiration_month":"12",
+                    "expiration_year":"2020",
+                    "token":"kj44cw",
+                    "image_url":"https://assets.braintreegateway.com/payment_method_logo/visa.png?environment=sandbox"
+                }
+            ]
+        }
