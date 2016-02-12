@@ -18,7 +18,8 @@ gem 'cancancan'
 gem 'paperclip'
 
 # Payment API
-gem 'braintree'
+# gem 'braintree'
+gem 'braintree-rails'
 
 # In memory cache
 gem 'redis'

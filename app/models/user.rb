@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   end
 
   def has_payment_info?
-    braintree_customer_id
+    organisation.braintree_customer_id
   end
 end
 

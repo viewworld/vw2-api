@@ -49,8 +49,9 @@ ActiveRecord::Schema.define(version: 20160211135059) do
   create_table "organisations", force: :cascade do |t|
     t.string   "name"
     t.string   "use"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.string   "braintree_customer_id"
   end
 
   create_table "report_files", force: :cascade do |t|
@@ -79,11 +80,10 @@ ActiveRecord::Schema.define(version: 20160211135059) do
     t.string   "last_name"
     t.string   "password_digest"
     t.string   "timezone_name"
-    t.integer  "role",                  default: 3
+    t.integer  "role",            default: 3
     t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "braintree_customer_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

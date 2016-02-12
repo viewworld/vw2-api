@@ -15,8 +15,10 @@ Rails.application.routes.draw do
       end
       resources :transactions, only: :create
       resources :organisations do
+        resources :payment_methods
+        resource :customer
         resource :subscribtion, only: [:show, :create, :destroy]
-      end 
+      end
       post 'subscribtion_status' => 'subscribtion_statuses#create'
     end
   end
