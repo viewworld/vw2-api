@@ -195,34 +195,36 @@ module Convert
 
     def self.single(id)
       old_form = OldVW::Form.find(id)
-      old_properties = old_form.data['properties']
-      old_order = old_form.data['order']
-
-      # Array of form fields
-      pure_data = old_properties.select do |key, value|
-        UUID.validate(key)
-      end.to_a
-
-      # Deletes UUID keys, adds id and uuid as values inside.
-      pure_data = pure_data.each_with_index do |slice, index|
-        slice[1]['uuid'] = slice[0]
-        slice[1]['id'] = index + 1
-        slice.delete_at(0)
-      end.flatten
-
+      pure_data = validate_uuids(old_form.data['properties'])
+      pure_data = change_ids(pure_data)
       pure_data = sanitize(pure_data)
+
+      old_order = old_form.data['order']
       new_order = id_order(pure_data, old_order)
 
       new_parameters = parameters_for(old_form, pure_data, new_order)
 
       if new_form = NewVW::Form.find_by(id: id)
         new_form.update_attributes(new_parameters)
-        new_form.save
       else
         new_form = NewVW::Form.new
         new_form.update_attributes(new_parameters)
-        new_form.save
       end
+    end
+
+    # Deletes UUID keys, adds id and uuid as values inside.
+    def self.change_ids(data)
+      data.each_with_index do |slice, index|
+        slice[1]['uuid'] = slice[0]
+        slice[1]['id'] = index + 1
+        slice.delete_at(0)
+      end.flatten
+    end
+
+    def self.validate_uuids(data)
+      data.select do |key, value|
+        UUID.validate(key)
+      end.to_a
     end
 
     def self.id_order(pure_data, uuid_order)
@@ -248,7 +250,7 @@ module Convert
         item['items'].delete('items') if item['items'] && item['items']['items']
         item['items'].delete('type') if item['items'] && item['items']['type']
         unless item['elements'].nil?
-          item['items']['elements'] = item['elements']
+          item['items'] = item['elements']
           item.delete('elements')
         end
 
@@ -288,7 +290,9 @@ module Convert
         verification_required = form.data['properties']['verification']['verificationRequired']
       end
 
-      if form.data['properties'] && form.data['properties']['verification'] && form.data['properties']['verification']['properties'] && form.data['properties']['verification']['properties']['status']
+      if form.data['properties'] && form.data['properties']['verification'] &&
+          form.data['properties']['verification']['properties'] &&
+          form.data['properties']['verification']['properties']['status']
         default = form.data['properties']['verification']['properties']['status']['default']
       end
 

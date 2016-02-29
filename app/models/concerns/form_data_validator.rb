@@ -3,28 +3,29 @@ class FormDataValidator < ActiveModel::Validator
     @form = form
   end
 
-  ERRORS = [ "one or more 'id' fields are missing.",
-             "one or more 'id' fields aren't numeric.",
-             "'id' fields aren't unique.",
-             "one or more 'type' fields aren't allowed.",
-             "one or more 'editable' fields are in wrong format.",
-             "one or more 'required' fields are in wrong format." ]
+  ERRORS = ["one or more 'id' fields are missing.",
+            "one or more 'id' fields aren't numeric.",
+            "'id' fields aren't unique.",
+            "one or more 'type' fields aren't allowed.",
+            "one or more 'editable' fields are in wrong format.",
+            "one or more 'required' fields are in wrong format."].freeze
 
-  ALLOWED_TYPES = %w( text
-                      media
-                      select
-                      numeric
-                      date_time
-                      yes_no
-                      gps
-                      metadata )
+  ALLOWED_TYPES = %w(text
+                     media
+                     select
+                     numeric
+                     date_time
+                     yes_no
+                     gps
+                     metadata).freeze
 
   def validate
     @form.errors[:base] << ERRORS[0] unless all_fields_contains_id?
     @form.errors[:base] << ERRORS[1] unless all_id_fields_are_numeric?
     @form.errors[:base] << ERRORS[2] unless all_id_fields_are_unique?
     @form.errors[:base] << ERRORS[3] unless all_fields_are_of_allowed_type?
-    @form.errors[:base] << ERRORS[4] unless all_fields_contains_editable_boolean? @form.errors[:base] << ERRORS[5] unless all_fields_contains_required_boolean?
+    @form.errors[:base] << ERRORS[4] unless all_fields_contains_editable_boolean?
+    @form.errors[:base] << ERRORS[5] unless all_fields_contains_required_boolean?
   end
 
   def all_fields_contains_id?

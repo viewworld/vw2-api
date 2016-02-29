@@ -28,7 +28,7 @@ class Report < ActiveRecord::Base
       else
         report_value = report_value.first.values.first
       end
-      form_item[:items][:report] = report_value
+      form_item[:items][:value] = report_value
     end
     ordered(filled_data)
   end

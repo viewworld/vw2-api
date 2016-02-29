@@ -48,7 +48,7 @@ class Form < ActiveRecord::Base
   end
 
   # Lists only id and title from each data item.
-  def simple_data
+  def basic_data
     unordered = self.data.map { |item| item.slice(:id, :title, :type) }
     unordered.sort_by { |item| order.index(item[:id]) }
   end

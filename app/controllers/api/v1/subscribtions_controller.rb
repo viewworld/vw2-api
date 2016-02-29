@@ -12,34 +12,32 @@ class Api::V1::SubscribtionsController < ApplicationController
   end
 
   def create
-    customer = Braintree::Customer.create(first_name: params[:first_name],
-                                          last_name: params[:last_name],
-                                          company: params[:company],
-                                          email: current_user.email,
-                                          phone: params[:phone])
-    render json: { errors: customer.errors }, status: 422 unless customer
-
-    customer_id = customer.customer.id
-    payment_method = Braintree::PaymentMethod.create(customer_id: customer_id,
-                                                     payment_method_nonce: 'fake-valid-nonce')
-    render json: { errors: payment_method.errors }, status: 422 unless payment_method
-
-    token = payment_method.payment_method.token
-    subscribtion = Braintree::Subscription.create(payment_method_token: token,
-                                                  plan_id: 'vw2_main')
-    if subscribtion.success?
-      if current_user.organisation.has_payment_info?
-        render json: { ok: 'subscribtion created.' }
-      else
-        current_user.organisation.update(braintree_customer_id: customer.customer.id)
-        render json: { ok: 'customer, payment_method and subscribtion created.' }
-      end
+    if current_user.has_payment_info?
+      render json: { errors: 'customer exists.' }
     else
-      render json: { errors: subscribtion.errors }, status: 422
+      customer = Braintree::Customer.create(first_name: params[:first_name],
+                                            last_name: params[:last_name],
+                                            company: params[:company],
+                                            email: current_user.email,
+                                            phone: params[:phone])
+
+      if customer.success?
+        current_user.organisation.
+          update(braintree_customer_id: customer.customer.id)
+        render json: { ok: 'customer created.' }
+      else
+        render json: { errors: subscribtion.errors }, status: 422
+      end
     end
   end
 
   def destroy
+    customer = Braintree::Customer.delete(@customer.id)
+    if customer.success?
+      head 200
+    else
+      render json: { errors: customer.errors }
+    end
   end
 
   private

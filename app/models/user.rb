@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
+  enum role: { sysadmin: 1, admin: 2, user: 3, editor: 4 }
   before_save { self.email = email.downcase }
-  # after_save :set_default_role
 
   belongs_to :group
   delegate :organisation, to: :group, allow_nil: true
@@ -19,31 +19,6 @@ class User < ActiveRecord::Base
     auth_token = SecureRandom.urlsafe_base64
     $redis.hset(auth_token, "#{self.class.to_s}_id", self.id)
     auth_token
-  end
-
-  ROLES = { 1 => 'sysadmin',
-            2 => 'admin',
-            3 => 'user',
-            4 => 'editor' }.freeze
-
-  def role
-    ROLES[read_attribute(:role)]
-  end
-
-  def sysadmin?
-    true if self.role == 'sysadmin'
-  end
-
-  def admin?
-    true if self.role == 'admin'
-  end
-
-  def user?
-    true if self.role == 'user'
-  end
-
-  def editor?
-    true if self.role == 'editor'
   end
 
   def has_payment_info?

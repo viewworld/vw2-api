@@ -19,12 +19,22 @@ class Api::V1::PaymentMethodsController < ApplicationController
 
   def update
     payment_method = Braintree::PaymentMethod.
-      update(@payment_method.token, 
+      update(@payment_method.token,
              options: { make_default: params[:default] })
     if payment_method.success?
       head 200
     else
       render json: { errors: payment_method.errors }, status: 422
+    end
+  end
+
+  def destroy
+    payment_method = Braintree::PaymentMethod.
+      delete(@payment_method.token)
+    if payment_method.success?
+      head 200
+    else
+      render json: { errors: payment_method.errors }
     end
   end
 
