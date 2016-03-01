@@ -1,4 +1,6 @@
 class ReportDataValidator
+  using HashExtensions
+
   def initialize(report)
     @report = report
     @report_data = @report.pure_data
@@ -37,7 +39,7 @@ class ReportDataValidator
   end
 
   def all_id_fields_are_unique?
-    ids = @report_data.map { |field| field.keys.first }
+    ids = @report_data.map { |report_field| report_field.report_id }
     return true if ids == ids.uniq
   end
 
@@ -46,29 +48,31 @@ class ReportDataValidator
   end
 
   def all_fields_are_of_allowed_type?
-    truth_table = @report_data.map do |field|
-      form_field = @form_data.select do |ffield|
-        ffield[:id] == field.keys.first.to_i
-      end.first
-      report_value_type = field.values.first.class.name.underscore.to_sym
+    false_table = @report_data.map do |report_field|
+      form_field = select_form_field report_field.report_id
+      report_value_type = report_field.report_value_type
       false unless ALLOWED_TYPES[report_value_type].include? form_field[:type]
     end
-    return true unless truth_table.include? false
+    true unless false_table.include? false
   end
 
   def text_fields_in_range?
-    fields = text_reports
-    truth_table = fields.map do |field|
-      form_field = @form_data.select do |ffield|
-        ffield[:id] == field.keys.first.to_i
-      end.first
-      allowed_range = Range.new(form_field[:length].first, form_field[:length].last)
-      false unless allowed_range.include? field.values.first.length
+    false_table = text_reports.map do |report_field|
+      form_field = select_form_field report_field.report_id
+      length = form_field[:length]
+      allowed_range = Range.new(length.first, length.last)
+      false unless allowed_range.include? report_field.report_value.length
     end
-    return true unless truth_table.include? false
+    true unless false_table.include? false
   end
 
   private
+
+  def select_form_field(id)
+    @form_data.select do |form_field|
+      form_field[:id] == id
+    end.first
+  end
 
   # Returns array of only textual report fields.
   def text_reports
@@ -76,8 +80,8 @@ class ReportDataValidator
       field[:type] == 'text'
     end.map { |field| field['id'] }
 
-    @report_data.select do |field|
-      form_text_ids.include? field.keys.first.to_i
+    @report_data.select do |report_field|
+      form_text_ids.include? report_field.report_id
     end
   end
 end

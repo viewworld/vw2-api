@@ -1,6 +1,6 @@
 class Api::V1::CustomersController < ApplicationController
   before_action :authenticate_with_token!
-  
+
   def show
     customer_id = current_user.has_payment_info?
     if customer_id && customer = BraintreeRails::Customer.find(customer_id)

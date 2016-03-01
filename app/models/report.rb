@@ -1,4 +1,6 @@
 class Report < ActiveRecord::Base
+  using HashExtensions
+
   belongs_to :form
   delegate :organisation, to: :form, allow_nil: true
 
@@ -14,21 +16,17 @@ class Report < ActiveRecord::Base
   # Each report field in Form's data JSON is filled with particular
   # Report's data value (if present).
   def data
-    report_data = read_attribute(:data)
     filled_data = self.form.data
     filled_data.each do |form_item|
-      report_value = report_data.select do |report_item|
-        report_item.keys.first.to_i == form_item[:id]
-      end
-
-      if report_value.nil? || report_value.empty?
-        report_value
-      elsif form_item[:type] == 'media'
-        report_value = serialized_report_file(report_value.first.values.first)
+      report = select_report form_item[:id]
+      if report.nil?
+        report
+      elsif form_item.form_media?
+        report = serialized_report_file(report.report_value)
       else
-        report_value = report_value.first.values.first
+        report = report.report_value
       end
-      form_item[:items][:value] = report_value
+      form_item[:items][:value] = report
     end
     ordered(filled_data)
   end
@@ -54,5 +52,11 @@ class Report < ActiveRecord::Base
                    content_type: report_file.file_content_type,
                    url: report_file.file.url }
     return serialized
+  end
+
+  def select_report(id)
+    pure_data.select do |report_item|
+      report_item.report_id == id
+    end.first
   end
 end
