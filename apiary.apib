@@ -1266,6 +1266,146 @@ For users form is visible only if  it has set ```associated: true``` to the same
 
 + Response 200 (application/json; charset=utf-8)
 
+## Organisations [/organisations]
+
+### organisations#index [GET]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+            
++ Response 200 (application/json; charset=utf-8)
+
+        [
+            {
+                "id":619,
+                "name":"adipo"
+            },
+            {
+                "id":648,
+                "name":"Global fund"
+            },
+            {
+                "id":653,
+                "name":"EnviClean"
+            },
+            {
+                "id":657,
+                "name":"UNDP"
+            },
+            {
+                "id":661,
+                "name":"adwordstest"
+            },
+            {
+                "id":8,
+                "name":"Sofies"
+            },
+            {
+                "id":60,
+                "name":"CRS"
+            }
+        ]
+
+## Organisation [/organisations/{organisation_id}]
+
++ Parameters
+    + organisation_id:3 (number) - ID of organisation
+
+
+### organisations#show [GET]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+            
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "id":3,
+            "name":"Demo HQ",
+            "groups":[
+                {
+                    "id":8,
+                    "parent_id":1,
+                    "name":"Demo HQ"
+                },
+                {
+                    "id":2016,
+                    "parent_id":8,
+                    "name":"Vllage Capacity Test"
+                },
+                {
+                    "id":1099,
+                    "parent_id":142,
+                    "name":"Uganda"
+                },
+                {
+                    "id":1392,
+                    "parent_id":1203,
+                    "name":"Kunde"
+                },
+                {
+                    "id":1821,
+                    "parent_id":1817,
+                    "name":"dev-test-organisation-1.2.1"
+                }
+            ],
+            "users":[
+                {
+                    "id":2176,
+                    "token":null,
+                    "email":"tomas.koutsky@gmail.com",
+                    "first_name":"tomas",
+                    "last_name":"koutsky"
+                },
+                {
+                    "id":469,
+                    "token":null,
+                    "email":"kathalystconsultant@gmail.com",
+                    "first_name":"kathrine",
+                    "last_name":"Alexandrowiz"
+                },
+                {
+                    "id":56,
+                    "token":null,
+                    "email":"ivnsnk.cz@gmail.com",
+                    "first_name":"Admin",
+                    "last_name":"demo"
+                },
+                {
+                    "id":1228,
+                    "token":null,
+                    "email":"tss@stevnss.com",
+                    "first_name":"Thor",
+                    "last_name":"Stevnss"
+                },
+                {
+                    "id":1714,
+                    "token":null,
+                    "email":"rf@fairpeople.com",
+                    "first_name":"Rasmus",
+                    "last_name":"Feilberg"
+                },
+                {
+                    "id":1272,
+                    "token":null,
+                    "email":"cthing@mail.dk",
+                    "first_name":"Christian ",
+                    "last_name":"Thing"
+                },
+                {
+                    "id":1229,
+                    "token":null,
+                    "email":"littelesun@viewworld.dk",
+                    "first_name":"Little",
+                    "last_name":"Sun"
+                }
+            ]
+        }
+
 ## Subscribtion [/organisations/{organisation_id}/subscribtion]
 
 + Parameters
