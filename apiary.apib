@@ -390,31 +390,87 @@ Returns created form with status ```201```.
                 "data":[
                     {
                         "id":1,
-                        "hint":{
-                            "en":"name of species"
-                        },
+                        "hint":"name of species",
                         "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
+                        "title":"What species did you see?",
+                        "default":"Rhino",
+                        "hidden":false,
                         "required":true
                     },
                     {
                         "id":2,
-                        "hint":{
-                            "en":"name of species"
-                        },
-                        "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
+                        "hint":"size of species",
+                        "type":"numeric",
+                        "title":"How large species did you see?",
+                        "default": 12,
+                        "hidden":false,
                         "required":true
+                    },
+                    {
+                        "id":3,
+                        "hint":"where",
+                        "type":"gps",
+                        "title":"Where did you see?",
+                        "hidden":false,
+                        "required":true                    
+                    },
+                    {
+                        "id":4,
+                        "hint":"select something",
+                        "type":"select",
+                        "title":"Select someting please",
+                        "single": true,
+                        "label": "some label",
+                        "hidden":false,
+                        "required":true                    
+                    },
+                    {
+                        "id":5,
+                        "hint":"barcode something",
+                        "type":"barcode",
+                        "title":"barcode someting please",
+                        "hidden":false,
+                        "required":true             
+                    },
+                    {
+                        "id":6,
+                        "hint":"put date here",
+                        "type":"date_time",
+                        "title":"date please",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":7,
+                        "hint":"upload media",
+                        "type":"media",
+                        "title":"upload media",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":8,
+                        "hint":"upload custom",
+                        "type":"custom_upload",
+                        "title":"upload custom file",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":9,
+                        "hint":"calculate something",
+                        "type":"calculation",
+                        "title":"calculate something",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":10,
+                        "type":"page_break"
+                    },
+                    {
+                        "id": 11,
+                        "type": "branching"
                     }
                 ],
                 "order":[
@@ -496,69 +552,9 @@ Returns created form with status ```201```.
                         "name":"Country Office"
                     },
                     {
-                        "id":1364,
-                        "parent_id":8,
-                        "name":"Business"
-                    },
-                    {
-                        "id":1815,
-                        "parent_id":8,
-                        "name":"dev-test-organisation-1.0.0"
-                    },
-                    {
-                        "id":2015,
-                        "parent_id":8,
-                        "name":"Well inspectors"
-                    },
-                    {
-                        "id":2035,
-                        "parent_id":8,
-                        "name":"Well inspectors..."
-                    },
-                    {
-                        "id":2016,
-                        "parent_id":8,
-                        "name":"Vllage Capacity Test"
-                    },
-                    {
-                        "id":1099,
-                        "parent_id":142,
-                        "name":"Uganda"
-                    },
-                    {
-                        "id":1392,
-                        "parent_id":1203,
-                        "name":"Kunde"
-                    },
-                    {
                         "id":1363,
                         "parent_id":1364,
                         "name":"Distribution"
-                    },
-                    {
-                        "id":1203,
-                        "parent_id":1364,
-                        "name":"Håndværker"
-                    },
-                    {
-                        "id":1818,
-                        "parent_id":1815,
-                        "name":"dev-organisation-group-1.1.1"
-                    },
-                    {
-                        "id":1817,
-                        "parent_id":1815,
-                        "name":"dev-test-organisation-1.1.0"
-                    },
-                    {
-                        "id":1819,
-                        "parent_id":1815,
-                        "name":"dev-organisation-group-1.1.2"
-                    },
-                    {
-                        "id":1822,
-                        "parent_id":1817,
-                        "name":"dev-test-organisation-1.2.2"
                     },
                     {
                         "id":1821,
@@ -625,46 +621,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "includedInFeed":false
                 },
                 {
-                    "id":2,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Excellent",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Above average",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Average",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Below average",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Poor",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"2. In general, how would you rate your experience of the course?",
-                    "editable":true,
-                    "required":false
-                },
-                {
                     "id":3,
                     "hint":"",
                     "type":"text",
@@ -672,46 +628,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                         "required":false
                     },
                     "title":"If you answered \"below average\" or \"poor\" then please explain why",
-                    "editable":true,
-                    "required":false
-                },
-                {
-                    "id":4,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Strongly agree",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Agree",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Neither agree nor disagree",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Disagree",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Strongly disagree",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"3. Overall, were the explanations of the different topics clear?",
                     "editable":true,
                     "required":false
                 },
@@ -829,46 +745,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "required":false
                 },
                 {
-                    "id":10,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Strongly agree",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Agree",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Neither agree nor disagree",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Disagree",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Strongly disagree",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"6. Do you feel that what you have learned will contribute to improving your own professional work?",
-                    "editable":true,
-                    "required":false
-                },
-                {
                     "id":11,
                     "hint":"",
                     "type":"text",
@@ -876,46 +752,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                         "required":false
                     },
                     "title":"If you answered \"disagree\" or \"strongly disagree\" then please explain why",
-                    "editable":true,
-                    "required":false
-                },
-                {
-                    "id":12,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Strongly agree",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Agree",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Neither agree nor disagree",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Disagree",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Strongly disagree",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"7. Do you feel you are now better able to [add learning objective]?",
                     "editable":true,
                     "required":false
                 },
@@ -1045,31 +881,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "name":"Demo HQ"
                 },
                 {
-                    "id":1838,
-                    "parent_id":8,
-                    "name":"qweqwe"
-                },
-                {
-                    "id":1928,
-                    "parent_id":8,
-                    "name":"Collection of animals"
-                },
-                {
-                    "id":1929,
-                    "parent_id":8,
-                    "name":"Niels DEMO group"
-                },
-                {
-                    "id":1927,
-                    "parent_id":8,
-                    "name":"Map constructor presentation"
-                },
-                {
-                    "id":142,
-                    "parent_id":8,
-                    "name":"Country Office"
-                },
-                {
                     "id":1364,
                     "parent_id":8,
                     "name":"Business"
@@ -1118,21 +929,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "id":1818,
                     "parent_id":1815,
                     "name":"dev-organisation-group-1.1.1"
-                },
-                {
-                    "id":1817,
-                    "parent_id":1815,
-                    "name":"dev-test-organisation-1.1.0"
-                },
-                {
-                    "id":1819,
-                    "parent_id":1815,
-                    "name":"dev-organisation-group-1.1.2"
-                },
-                {
-                    "id":1822,
-                    "parent_id":1817,
-                    "name":"dev-test-organisation-1.2.2"
                 },
                 {
                     "id":1821,
