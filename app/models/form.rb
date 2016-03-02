@@ -31,7 +31,7 @@ class Form < ActiveRecord::Base
     unordered = read_attribute(:data)
     return [] if unordered.nil? || unordered.empty?
 
-    unordered = unordered.map { |item| item.with_indifferent_access }
+    unordered = unordered.map(&:with_indifferent_access)
     return unordered unless unordered.size == order.size
 
     unordered.sort_by { |item| order.index(item[:id]) }
@@ -41,7 +41,7 @@ class Form < ActiveRecord::Base
   # Returns true if so.
   # Fills order with ids from data field if not.
   def check_or_update_order
-    ids = self.data.map { |item| item[:id] }
+    ids = data.map { |item| item[:id] }
     return true if ids.sort == order.sort
 
     self.order = ids
@@ -49,8 +49,7 @@ class Form < ActiveRecord::Base
 
   # Lists only id and title from each data item.
   def basic_data
-    unordered = self.data.map { |item| item.slice(:id, :title, :type) }
+    unordered = data.map { |item| item.slice(:id, :title, :type) }
     unordered.sort_by { |item| order.index(item[:id]) }
   end
 end
-

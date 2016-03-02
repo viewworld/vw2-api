@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :report do
-    form nil
-data ""
+    data [{"1" => "test"}, {"2" => "test2"}]
+    form
   end
-
 end

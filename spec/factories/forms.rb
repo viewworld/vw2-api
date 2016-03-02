@@ -1,9 +1,10 @@
 FactoryGirl.define do
   factory :form do
     name "MyString"
-    data [{"id"=>1, "hint"=>{"en"=>"name of species"}, "type"=>"text", "items"=>{"report"=>nil}, "title"=>{"en"=>"What species did you see?"}, "editable"=>true, "required"=>true},
-          {"id"=>2, "hint"=>{"en"=>"name of species"}, "type"=>"text", "items"=>{"report"=>nil}, "title"=>{"en"=>"What species did you see?"}, "editable"=>true, "required"=>true},
-          {"id"=>3, "hint"=>{"en"=>"fileupload"}, "type"=>"media", "items"=>{"report"=>nil}, "title"=>{"en"=>"upload file?"}, "editable"=>true, "required"=>true}]
+    groups [1, 2]
+    data [{"id"=>1, "hint"=>"name of species", "type"=>"text", "items"=>{}, "title"=>"What species did you see?", "editable"=>true, "required"=>true, "length" => [1, 10]},
+          {"id"=>2, "hint"=>"name of species", "type"=>"text", "items"=>{}, "title"=>"What species did you see?", "editable"=>true, "required"=>true, "length" => [1, 10]}]
+    order [2, 1]
     organisation
   end
 end

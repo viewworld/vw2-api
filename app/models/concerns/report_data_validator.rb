@@ -11,12 +11,11 @@ class ReportDataValidator
             "one or more 'id' fields aren't numeric.",
             "'id' fields aren't unique.",
             "quantity doesnt match form.",
-            "one or more fileds are of nonvalid type",
-            "one or more text fields aren't in allowed length."]
+            "one or more fileds doesn't match form's field format.",].freeze
 
   ALLOWED_TYPES = {string: ['text'],
                    array: ['gps'],
-                   fixnum: ['media', 'numeric'] }
+                   fixnum: ['media', 'numeric']}.freeze
 
   def validate
     @report.errors[:base] << ERRORS[0] unless all_fields_contains_id?
@@ -24,7 +23,6 @@ class ReportDataValidator
     @report.errors[:base] << ERRORS[2] unless all_id_fields_are_unique?
     @report.errors[:base] << ERRORS[3] unless quantity_match_form?
     @report.errors[:base] << ERRORS[4] unless all_fields_are_of_allowed_type?
-    @report.errors[:base] << ERRORS[5] unless text_fields_in_range?
   end
 
   def all_fields_contains_id?

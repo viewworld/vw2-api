@@ -35,6 +35,10 @@ module NewVW
   class Form < SetupDb
     belongs_to :organisation
   end
+
+  class Report < SetupDb
+    belongs_to :form
+  end
 end
 
 # Config for old database we want to migrate from.
@@ -67,6 +71,11 @@ module OldVW
 
   class Form < SetupDb
     belongs_to :organisation
+    serialize :data, JSON
+  end
+
+  class Report < SetupDb
+    belongs_to :form
     serialize :data, JSON
   end
 end
@@ -246,7 +255,6 @@ module Convert
         item.delete('fieldTitle')
         item.delete('allowList')
         item.delete('hidden')
-        item.delete('uuid')
         item['items'].delete('items') if item['items'] && item['items']['items']
         item['items'].delete('type') if item['items'] && item['items']['type']
         unless item['elements'].nil?
@@ -296,7 +304,6 @@ module Convert
         default = form.data['properties']['verification']['properties']['status']['default']
       end
 
-
       {
         id: form.id,
         name: form.name,
@@ -309,6 +316,14 @@ module Convert
         deleted_at: form.deleted_at,
         organisation_id: new_organisation_for(form)
       }
+    end
+  end
+
+  class Reports
+    def self.single(id)
+      old_form = old_report.form
+      new_form = NewVW::Form.find(old_form.id)
+      old_report = OldVW::Report.find(id)
     end
   end
 end

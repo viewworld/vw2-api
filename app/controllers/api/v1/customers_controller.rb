@@ -1,10 +1,10 @@
 class Api::V1::CustomersController < ApplicationController
   before_action :authenticate_with_token!
+  before_action :find_customer
 
   def show
-    customer_id = current_user.has_payment_info?
-    if customer_id && customer = BraintreeRails::Customer.find(customer_id)
-      render json: customer, status: 200
+    if @customer
+      render json: @customer, status: 200
     else
       render json: { error: 'doesnt exist' }, status: 422
     end
@@ -26,5 +26,11 @@ class Api::V1::CustomersController < ApplicationController
         render json: { errors: customer.errors }, status: 422 unless customer
       end
     end
+  end
+
+  private
+
+  def find_customer
+    @customer = BraintreeRails::Customer.find(current_user.has_payment_info?)
   end
 end

@@ -3,7 +3,9 @@ class Api::V1::OrganisationsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    render json: @organisations, status: 200
+    render json: @organisations,
+           each_serializer: OrganisationsSerializer,
+           status: 200
   end
 
   def show

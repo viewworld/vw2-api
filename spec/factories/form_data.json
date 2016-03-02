@@ -1,0 +1,39 @@
+{
+  "name": "Demo Species Observations",
+  "groups": [
+    1,
+    2,
+    3
+  ],
+  "active": true,
+  "data": [
+    {
+      "id": 1,
+      "hint": "name of species",
+      "type": "text",
+      "items": {},
+      "title": "What species did you see?",
+      "default": "Rhino",
+      "editable": true,
+      "required": true,
+      "hidden": false,
+      "length": [1,10]
+    },
+    {
+      "id": 2,
+      "hint": "size of species",
+      "type": "numeric",
+      "items": {},
+      "title": "What species did you see?",
+      "default": 23,
+      "editable": true,
+      "required": true,
+      "hidden": false,
+      "length": [1,200]
+    }
+  ],
+  "order": [
+    2,
+    1
+  ]
+}
