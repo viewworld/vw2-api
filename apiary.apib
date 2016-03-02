@@ -368,8 +368,10 @@ So only forms associated to same Organisation as a User are listed.
         ]
         
 ### forms#create [POST]
-You may create your own form using this endpoint.
-Form has to be posted as valid JSON with all required data fields.
+You may create your own form using this endpoint. Form has to be posted as valid JSON with all required data fields.
+IDs of data field has to be incremental integer.
+Order array has to match ID fields in data array, if not given order will be discarded and IDs from data will be used instead of it.
+Groups array has to match real groups associated with current user's organisation.
 Returns created form with status ```201```.
 
 + Request (application/json)
@@ -382,9 +384,8 @@ Returns created form with status ```201```.
             {
                 "name":"Demo Species Observations",
                 "groups":[
-                    1,
-                    2,
-                    3
+                    1928,
+                    1838
                 ],
                 "active":true,
                 "data":[
@@ -474,6 +475,15 @@ Returns created form with status ```201```.
                     }
                 ],
                 "order":[
+                    11,
+                    10,
+                    9,
+                    8,
+                    7,
+                    6,
+                    5,
+                    4,
+                    3,
                     2,
                     1
                 ]
@@ -481,88 +491,208 @@ Returns created form with status ```201```.
 
 + Response 201 (application/json; charset=utf-8)
 
-            {
-                "id":2315,
-                "name":"Demo Species Observations",
-                "active":true,
-                "locked":false,
-                "verification":{
-                    "required":false,
-                    "default":"verified"
+        {
+            "id":2317,
+            "name":"Demo Species Observations",
+            "active":true,
+            "locked":false,
+            "verification":{
+                "required":false,
+                "default":"verified"
+            },
+            "data":[
+                {
+                    "id":11,
+                    "type":"branching",
+                    "required":false
                 },
-                "data":[
-                    {
-                        "id":1,
-                        "hint":{
-                            "en":"name of species"
-                        },
-                        "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
-                        "required":true
-                    },
-                    {
-                        "id":2,
-                        "hint":{
-                            "en":"name of species"
-                        },
-                        "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
-                        "required":true
-                    }
-                ],
-                "groups":[
-                    {
-                        "id":8,
-                        "parent_id":1,
-                        "name":"Demo HQ"
-                    },
-                    {
-                        "id":1838,
-                        "parent_id":8,
-                        "name":"qweqwe"
-                    },
-                    {
-                        "id":1928,
-                        "parent_id":8,
-                        "name":"Collection of animals"
-                    },
-                    {
-                        "id":1929,
-                        "parent_id":8,
-                        "name":"Niels DEMO group"
-                    },
-                    {
-                        "id":1927,
-                        "parent_id":8,
-                        "name":"Map constructor presentation"
-                    },
-                    {
-                        "id":142,
-                        "parent_id":8,
-                        "name":"Country Office"
-                    },
-                    {
-                        "id":1363,
-                        "parent_id":1364,
-                        "name":"Distribution"
-                    },
-                    {
-                        "id":1821,
-                        "parent_id":1817,
-                        "name":"dev-test-organisation-1.2.1"
-                    }
-                ]
-            }
+                {
+                    "id":10,
+                    "type":"page_break",
+                    "required":false
+                },
+                {
+                    "id":9,
+                    "hint":"calculate something",
+                    "type":"calculation",
+                    "title":"calculate something",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":8,
+                    "hint":"upload custom",
+                    "type":"custom_upload",
+                    "title":"upload custom file",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":7,
+                    "hint":"upload media",
+                    "type":"media",
+                    "title":"upload media",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":6,
+                    "hint":"put date here",
+                    "type":"date_time",
+                    "title":"date please",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":5,
+                    "hint":"barcode something",
+                    "type":"barcode",
+                    "title":"barcode someting please",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":4,
+                    "hint":"select something",
+                    "type":"select",
+                    "title":"Select someting please",
+                    "single":true,
+                    "label":"some label",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":3,
+                    "hint":"where",
+                    "type":"gps",
+                    "title":"Where did you see?",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":2,
+                    "hint":"size of species",
+                    "type":"numeric",
+                    "title":"How large species did you see?",
+                    "default":12,
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":1,
+                    "hint":"name of species",
+                    "type":"text",
+                    "title":"What species did you see?",
+                    "default":"Rhino",
+                    "hidden":false,
+                    "required":true
+                }
+            ],
+            "groups":[
+                {
+                    "id":8,
+                    "parent_id":1,
+                    "name":"Demo HQ"
+                },
+                {
+                    "id":1838,
+                    "parent_id":8,
+                    "name":"qweqwe",
+                    "associated":true
+                },
+                {
+                    "id":1928,
+                    "parent_id":8,
+                    "name":"Collection of animals",
+                    "associated":true
+                },
+                {
+                    "id":1929,
+                    "parent_id":8,
+                    "name":"Niels DEMO group"
+                },
+                {
+                    "id":1927,
+                    "parent_id":8,
+                    "name":"Map constructor presentation"
+                },
+                {
+                    "id":142,
+                    "parent_id":8,
+                    "name":"Country Office"
+                },
+                {
+                    "id":1364,
+                    "parent_id":8,
+                    "name":"Business"
+                },
+                {
+                    "id":1815,
+                    "parent_id":8,
+                    "name":"dev-test-organisation-1.0.0"
+                },
+                {
+                    "id":2015,
+                    "parent_id":8,
+                    "name":"Well inspectors"
+                },
+                {
+                    "id":2035,
+                    "parent_id":8,
+                    "name":"Well inspectors..."
+                },
+                {
+                    "id":2016,
+                    "parent_id":8,
+                    "name":"Vllage Capacity Test"
+                },
+                {
+                    "id":1099,
+                    "parent_id":142,
+                    "name":"Uganda"
+                },
+                {
+                    "id":1392,
+                    "parent_id":1203,
+                    "name":"Kunde"
+                },
+                {
+                    "id":1363,
+                    "parent_id":1364,
+                    "name":"Distribution"
+                },
+                {
+                    "id":1203,
+                    "parent_id":1364,
+                    "name":"Håndværker"
+                },
+                {
+                    "id":1818,
+                    "parent_id":1815,
+                    "name":"dev-organisation-group-1.1.1"
+                },
+                {
+                    "id":1817,
+                    "parent_id":1815,
+                    "name":"dev-test-organisation-1.1.0"
+                },
+                {
+                    "id":1819,
+                    "parent_id":1815,
+                    "name":"dev-organisation-group-1.1.2"
+                },
+                {
+                    "id":1822,
+                    "parent_id":1817,
+                    "name":"dev-test-organisation-1.2.2"
+                },
+                {
+                    "id":1821,
+                    "parent_id":1817,
+                    "name":"dev-test-organisation-1.2.1"
+                }
+            ]
+        }
 
 ## Form [/forms/{form_id}]
 
