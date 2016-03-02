@@ -368,8 +368,10 @@ So only forms associated to same Organisation as a User are listed.
         ]
         
 ### forms#create [POST]
-You may create your own form using this endpoint.
-Form has to be posted as valid JSON with all required data fields.
+You may create your own form using this endpoint. Form has to be posted as valid JSON with all required data fields.
+IDs of data field has to be incremental integer.
+Order array has to match ID fields in data array, if not given order will be discarded and IDs from data will be used instead of it.
+Groups array has to match real groups associated with current user's organisation.
 Returns created form with status ```201```.
 
 + Request (application/json)
@@ -382,42 +384,106 @@ Returns created form with status ```201```.
             {
                 "name":"Demo Species Observations",
                 "groups":[
-                    1,
-                    2,
-                    3
+                    1928,
+                    1838
                 ],
                 "active":true,
                 "data":[
                     {
                         "id":1,
-                        "hint":{
-                            "en":"name of species"
-                        },
+                        "hint":"name of species",
                         "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
+                        "title":"What species did you see?",
+                        "default":"Rhino",
+                        "hidden":false,
                         "required":true
                     },
                     {
                         "id":2,
-                        "hint":{
-                            "en":"name of species"
-                        },
-                        "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
+                        "hint":"size of species",
+                        "type":"numeric",
+                        "title":"How large species did you see?",
+                        "default": 12,
+                        "hidden":false,
                         "required":true
+                    },
+                    {
+                        "id":3,
+                        "hint":"where",
+                        "type":"gps",
+                        "title":"Where did you see?",
+                        "hidden":false,
+                        "required":true                    
+                    },
+                    {
+                        "id":4,
+                        "hint":"select something",
+                        "type":"select",
+                        "title":"Select someting please",
+                        "single": true,
+                        "label": "some label",
+                        "hidden":false,
+                        "required":true                    
+                    },
+                    {
+                        "id":5,
+                        "hint":"barcode something",
+                        "type":"barcode",
+                        "title":"barcode someting please",
+                        "hidden":false,
+                        "required":true             
+                    },
+                    {
+                        "id":6,
+                        "hint":"put date here",
+                        "type":"date_time",
+                        "title":"date please",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":7,
+                        "hint":"upload media",
+                        "type":"media",
+                        "title":"upload media",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":8,
+                        "hint":"upload custom",
+                        "type":"custom_upload",
+                        "title":"upload custom file",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":9,
+                        "hint":"calculate something",
+                        "type":"calculation",
+                        "title":"calculate something",
+                        "hidden":false,
+                        "required":true      
+                    },
+                    {
+                        "id":10,
+                        "type":"page_break"
+                    },
+                    {
+                        "id": 11,
+                        "type": "branching"
                     }
                 ],
                 "order":[
+                    11,
+                    10,
+                    9,
+                    8,
+                    7,
+                    6,
+                    5,
+                    4,
+                    3,
                     2,
                     1
                 ]
@@ -425,148 +491,208 @@ Returns created form with status ```201```.
 
 + Response 201 (application/json; charset=utf-8)
 
-            {
-                "id":2315,
-                "name":"Demo Species Observations",
-                "active":true,
-                "locked":false,
-                "verification":{
-                    "required":false,
-                    "default":"verified"
+        {
+            "id":2317,
+            "name":"Demo Species Observations",
+            "active":true,
+            "locked":false,
+            "verification":{
+                "required":false,
+                "default":"verified"
+            },
+            "data":[
+                {
+                    "id":11,
+                    "type":"branching",
+                    "required":false
                 },
-                "data":[
-                    {
-                        "id":1,
-                        "hint":{
-                            "en":"name of species"
-                        },
-                        "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
-                        "required":true
-                    },
-                    {
-                        "id":2,
-                        "hint":{
-                            "en":"name of species"
-                        },
-                        "type":"text",
-                        "items":{
-                        },
-                        "title":{
-                            "en":"What species did you see?"
-                        },
-                        "editable":true,
-                        "required":true
-                    }
-                ],
-                "groups":[
-                    {
-                        "id":8,
-                        "parent_id":1,
-                        "name":"Demo HQ"
-                    },
-                    {
-                        "id":1838,
-                        "parent_id":8,
-                        "name":"qweqwe"
-                    },
-                    {
-                        "id":1928,
-                        "parent_id":8,
-                        "name":"Collection of animals"
-                    },
-                    {
-                        "id":1929,
-                        "parent_id":8,
-                        "name":"Niels DEMO group"
-                    },
-                    {
-                        "id":1927,
-                        "parent_id":8,
-                        "name":"Map constructor presentation"
-                    },
-                    {
-                        "id":142,
-                        "parent_id":8,
-                        "name":"Country Office"
-                    },
-                    {
-                        "id":1364,
-                        "parent_id":8,
-                        "name":"Business"
-                    },
-                    {
-                        "id":1815,
-                        "parent_id":8,
-                        "name":"dev-test-organisation-1.0.0"
-                    },
-                    {
-                        "id":2015,
-                        "parent_id":8,
-                        "name":"Well inspectors"
-                    },
-                    {
-                        "id":2035,
-                        "parent_id":8,
-                        "name":"Well inspectors..."
-                    },
-                    {
-                        "id":2016,
-                        "parent_id":8,
-                        "name":"Vllage Capacity Test"
-                    },
-                    {
-                        "id":1099,
-                        "parent_id":142,
-                        "name":"Uganda"
-                    },
-                    {
-                        "id":1392,
-                        "parent_id":1203,
-                        "name":"Kunde"
-                    },
-                    {
-                        "id":1363,
-                        "parent_id":1364,
-                        "name":"Distribution"
-                    },
-                    {
-                        "id":1203,
-                        "parent_id":1364,
-                        "name":"Håndværker"
-                    },
-                    {
-                        "id":1818,
-                        "parent_id":1815,
-                        "name":"dev-organisation-group-1.1.1"
-                    },
-                    {
-                        "id":1817,
-                        "parent_id":1815,
-                        "name":"dev-test-organisation-1.1.0"
-                    },
-                    {
-                        "id":1819,
-                        "parent_id":1815,
-                        "name":"dev-organisation-group-1.1.2"
-                    },
-                    {
-                        "id":1822,
-                        "parent_id":1817,
-                        "name":"dev-test-organisation-1.2.2"
-                    },
-                    {
-                        "id":1821,
-                        "parent_id":1817,
-                        "name":"dev-test-organisation-1.2.1"
-                    }
-                ]
-            }
+                {
+                    "id":10,
+                    "type":"page_break",
+                    "required":false
+                },
+                {
+                    "id":9,
+                    "hint":"calculate something",
+                    "type":"calculation",
+                    "title":"calculate something",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":8,
+                    "hint":"upload custom",
+                    "type":"custom_upload",
+                    "title":"upload custom file",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":7,
+                    "hint":"upload media",
+                    "type":"media",
+                    "title":"upload media",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":6,
+                    "hint":"put date here",
+                    "type":"date_time",
+                    "title":"date please",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":5,
+                    "hint":"barcode something",
+                    "type":"barcode",
+                    "title":"barcode someting please",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":4,
+                    "hint":"select something",
+                    "type":"select",
+                    "title":"Select someting please",
+                    "single":true,
+                    "label":"some label",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":3,
+                    "hint":"where",
+                    "type":"gps",
+                    "title":"Where did you see?",
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":2,
+                    "hint":"size of species",
+                    "type":"numeric",
+                    "title":"How large species did you see?",
+                    "default":12,
+                    "hidden":false,
+                    "required":true
+                },
+                {
+                    "id":1,
+                    "hint":"name of species",
+                    "type":"text",
+                    "title":"What species did you see?",
+                    "default":"Rhino",
+                    "hidden":false,
+                    "required":true
+                }
+            ],
+            "groups":[
+                {
+                    "id":8,
+                    "parent_id":1,
+                    "name":"Demo HQ"
+                },
+                {
+                    "id":1838,
+                    "parent_id":8,
+                    "name":"qweqwe",
+                    "associated":true
+                },
+                {
+                    "id":1928,
+                    "parent_id":8,
+                    "name":"Collection of animals",
+                    "associated":true
+                },
+                {
+                    "id":1929,
+                    "parent_id":8,
+                    "name":"Niels DEMO group"
+                },
+                {
+                    "id":1927,
+                    "parent_id":8,
+                    "name":"Map constructor presentation"
+                },
+                {
+                    "id":142,
+                    "parent_id":8,
+                    "name":"Country Office"
+                },
+                {
+                    "id":1364,
+                    "parent_id":8,
+                    "name":"Business"
+                },
+                {
+                    "id":1815,
+                    "parent_id":8,
+                    "name":"dev-test-organisation-1.0.0"
+                },
+                {
+                    "id":2015,
+                    "parent_id":8,
+                    "name":"Well inspectors"
+                },
+                {
+                    "id":2035,
+                    "parent_id":8,
+                    "name":"Well inspectors..."
+                },
+                {
+                    "id":2016,
+                    "parent_id":8,
+                    "name":"Vllage Capacity Test"
+                },
+                {
+                    "id":1099,
+                    "parent_id":142,
+                    "name":"Uganda"
+                },
+                {
+                    "id":1392,
+                    "parent_id":1203,
+                    "name":"Kunde"
+                },
+                {
+                    "id":1363,
+                    "parent_id":1364,
+                    "name":"Distribution"
+                },
+                {
+                    "id":1203,
+                    "parent_id":1364,
+                    "name":"Håndværker"
+                },
+                {
+                    "id":1818,
+                    "parent_id":1815,
+                    "name":"dev-organisation-group-1.1.1"
+                },
+                {
+                    "id":1817,
+                    "parent_id":1815,
+                    "name":"dev-test-organisation-1.1.0"
+                },
+                {
+                    "id":1819,
+                    "parent_id":1815,
+                    "name":"dev-organisation-group-1.1.2"
+                },
+                {
+                    "id":1822,
+                    "parent_id":1817,
+                    "name":"dev-test-organisation-1.2.2"
+                },
+                {
+                    "id":1821,
+                    "parent_id":1817,
+                    "name":"dev-test-organisation-1.2.1"
+                }
+            ]
+        }
 
 ## Form [/forms/{form_id}]
 
@@ -625,46 +751,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "includedInFeed":false
                 },
                 {
-                    "id":2,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Excellent",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Above average",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Average",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Below average",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Poor",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"2. In general, how would you rate your experience of the course?",
-                    "editable":true,
-                    "required":false
-                },
-                {
                     "id":3,
                     "hint":"",
                     "type":"text",
@@ -672,46 +758,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                         "required":false
                     },
                     "title":"If you answered \"below average\" or \"poor\" then please explain why",
-                    "editable":true,
-                    "required":false
-                },
-                {
-                    "id":4,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Strongly agree",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Agree",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Neither agree nor disagree",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Disagree",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Strongly disagree",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"3. Overall, were the explanations of the different topics clear?",
                     "editable":true,
                     "required":false
                 },
@@ -829,46 +875,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "required":false
                 },
                 {
-                    "id":10,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Strongly agree",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Agree",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Neither agree nor disagree",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Disagree",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Strongly disagree",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"6. Do you feel that what you have learned will contribute to improving your own professional work?",
-                    "editable":true,
-                    "required":false
-                },
-                {
                     "id":11,
                     "hint":"",
                     "type":"text",
@@ -876,46 +882,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                         "required":false
                     },
                     "title":"If you answered \"disagree\" or \"strongly disagree\" then please explain why",
-                    "editable":true,
-                    "required":false
-                },
-                {
-                    "id":12,
-                    "hint":"",
-                    "type":"select",
-                    "items":[
-                        {
-                            "type":"text",
-                            "label":"Strongly agree",
-                            "value":"5",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Agree",
-                            "value":"4",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Neither agree nor disagree",
-                            "value":"3",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Disagree",
-                            "value":"2",
-                            "default":false
-                        },
-                        {
-                            "type":"text",
-                            "label":"Strongly disagree",
-                            "value":"1",
-                            "default":false
-                        }
-                    ],
-                    "title":"7. Do you feel you are now better able to [add learning objective]?",
                     "editable":true,
                     "required":false
                 },
@@ -1045,31 +1011,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "name":"Demo HQ"
                 },
                 {
-                    "id":1838,
-                    "parent_id":8,
-                    "name":"qweqwe"
-                },
-                {
-                    "id":1928,
-                    "parent_id":8,
-                    "name":"Collection of animals"
-                },
-                {
-                    "id":1929,
-                    "parent_id":8,
-                    "name":"Niels DEMO group"
-                },
-                {
-                    "id":1927,
-                    "parent_id":8,
-                    "name":"Map constructor presentation"
-                },
-                {
-                    "id":142,
-                    "parent_id":8,
-                    "name":"Country Office"
-                },
-                {
                     "id":1364,
                     "parent_id":8,
                     "name":"Business"
@@ -1118,21 +1059,6 @@ For users form is visible only if  it has set ```associated: true``` to the same
                     "id":1818,
                     "parent_id":1815,
                     "name":"dev-organisation-group-1.1.1"
-                },
-                {
-                    "id":1817,
-                    "parent_id":1815,
-                    "name":"dev-test-organisation-1.1.0"
-                },
-                {
-                    "id":1819,
-                    "parent_id":1815,
-                    "name":"dev-organisation-group-1.1.2"
-                },
-                {
-                    "id":1822,
-                    "parent_id":1817,
-                    "name":"dev-test-organisation-1.2.2"
                 },
                 {
                     "id":1821,
@@ -1265,6 +1191,146 @@ For users form is visible only if  it has set ```associated: true``` to the same
             }
 
 + Response 200 (application/json; charset=utf-8)
+
+## Organisations [/organisations]
+
+### organisations#index [GET]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+            
++ Response 200 (application/json; charset=utf-8)
+
+        [
+            {
+                "id":619,
+                "name":"adipo"
+            },
+            {
+                "id":648,
+                "name":"Global fund"
+            },
+            {
+                "id":653,
+                "name":"EnviClean"
+            },
+            {
+                "id":657,
+                "name":"UNDP"
+            },
+            {
+                "id":661,
+                "name":"adwordstest"
+            },
+            {
+                "id":8,
+                "name":"Sofies"
+            },
+            {
+                "id":60,
+                "name":"CRS"
+            }
+        ]
+
+## Organisation [/organisations/{organisation_id}]
+
++ Parameters
+    + organisation_id:3 (number) - ID of organisation
+
+
+### organisations#show [GET]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: 3KeAPOuxtIFCMweJB7qLVA
+            
++ Response 200 (application/json; charset=utf-8)
+
+        {
+            "id":3,
+            "name":"Demo HQ",
+            "groups":[
+                {
+                    "id":8,
+                    "parent_id":1,
+                    "name":"Demo HQ"
+                },
+                {
+                    "id":2016,
+                    "parent_id":8,
+                    "name":"Vllage Capacity Test"
+                },
+                {
+                    "id":1099,
+                    "parent_id":142,
+                    "name":"Uganda"
+                },
+                {
+                    "id":1392,
+                    "parent_id":1203,
+                    "name":"Kunde"
+                },
+                {
+                    "id":1821,
+                    "parent_id":1817,
+                    "name":"dev-test-organisation-1.2.1"
+                }
+            ],
+            "users":[
+                {
+                    "id":2176,
+                    "token":null,
+                    "email":"tomas.koutsky@gmail.com",
+                    "first_name":"tomas",
+                    "last_name":"koutsky"
+                },
+                {
+                    "id":469,
+                    "token":null,
+                    "email":"kathalystconsultant@gmail.com",
+                    "first_name":"kathrine",
+                    "last_name":"Alexandrowiz"
+                },
+                {
+                    "id":56,
+                    "token":null,
+                    "email":"ivnsnk.cz@gmail.com",
+                    "first_name":"Admin",
+                    "last_name":"demo"
+                },
+                {
+                    "id":1228,
+                    "token":null,
+                    "email":"tss@stevnss.com",
+                    "first_name":"Thor",
+                    "last_name":"Stevnss"
+                },
+                {
+                    "id":1714,
+                    "token":null,
+                    "email":"rf@fairpeople.com",
+                    "first_name":"Rasmus",
+                    "last_name":"Feilberg"
+                },
+                {
+                    "id":1272,
+                    "token":null,
+                    "email":"cthing@mail.dk",
+                    "first_name":"Christian ",
+                    "last_name":"Thing"
+                },
+                {
+                    "id":1229,
+                    "token":null,
+                    "email":"littelesun@viewworld.dk",
+                    "first_name":"Little",
+                    "last_name":"Sun"
+                }
+            ]
+        }
 
 ## Subscribtion [/organisations/{organisation_id}/subscribtion]
 
