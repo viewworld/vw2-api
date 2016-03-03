@@ -1,4 +1,5 @@
 class ReportSerializer < ActiveModel::Serializer
+  include NullAttributesRemover
   attributes :id, :form_id, :data
 
   def form_data

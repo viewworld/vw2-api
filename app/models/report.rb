@@ -8,8 +8,19 @@ class Report < ActiveRecord::Base
     ReportDataValidator.new(report).validate
   end
 
+  def data_ids
+    pure_data.map { |report_field| report_field.report_id }
+  end
+
   def pure_data
     read_attribute(:data)
+  end
+
+  def media_ids
+    form_ids = self.form.media_ids
+    pure_data.select do |report_field|
+      form_ids.include? report_field.report_id
+    end.map { |report_field| report_field[:id] }
   end
 
   # Returns associated Form filled with Report's data values.
@@ -26,7 +37,7 @@ class Report < ActiveRecord::Base
       else
         report = report.report_value
       end
-      form_item[:items][:value] = report
+      form_item[:value] = report
     end
     ordered(filled_data)
   end

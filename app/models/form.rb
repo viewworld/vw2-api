@@ -1,4 +1,6 @@
 class Form < ActiveRecord::Base
+  using HashExtensions
+
   acts_as_paranoid
   before_save :check_or_update_order
   belongs_to :organisation
@@ -6,6 +8,20 @@ class Form < ActiveRecord::Base
 
   validate do |form|
     FormDataValidator.new(form).validate
+  end
+
+  %w(media text select required).each do |type|
+    define_method "#{type}_data" do
+      data.select { |f| f.send("form_#{type}?") }
+    end
+
+    define_method "#{type}_ids" do
+      send("#{type}_data").map { |form_field| form_field[:id] }
+    end
+  end
+
+  def field(id)
+    data.find { |form_field| form_field[:id] == id }
   end
 
   # Reads order column and returns it with each element as an integer.
