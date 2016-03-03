@@ -1,4 +1,13 @@
 module Refinements
+  def method_missing(method, *args, &block)
+    if self.has_key?(method)
+      return self[method]
+    else
+      raise NoMethodError.
+        new("undefined method '#{method}' for #{self.class}")
+    end
+  end
+
   def report_id
     keys.first.to_i
   end
@@ -24,8 +33,12 @@ end
 
 module HashExtensions
   refine Hash do
-    include ::Refinements
+#    include ::Refinements
   end
+end
+
+class Hash
+  include ::Refinements
 end
 
 class HashWithIndifferentAccess

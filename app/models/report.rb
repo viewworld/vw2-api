@@ -9,7 +9,7 @@ class Report < ActiveRecord::Base
   end
 
   def data_ids
-    pure_data.map { |report_field| report_field.report_id }
+    pure_data.map(&:report_id)
   end
 
   def pure_data
@@ -17,10 +17,20 @@ class Report < ActiveRecord::Base
   end
 
   def media_ids
-    form_ids = self.form.media_ids
+    form_ids = form.media_ids
     pure_data.select do |report_field|
       form_ids.include? report_field.report_id
-    end.map { |report_field| report_field[:id] }
+    end.map(&:id)
+  end
+
+  def select_data(required_only = false)
+    form.select_ids.map do |id|
+      if required_only
+        field(id) if required?(id)
+      else
+        field(id)
+      end
+    end
   end
 
   # Returns associated Form filled with Report's data values.
@@ -29,7 +39,7 @@ class Report < ActiveRecord::Base
   def data
     filled_data = self.form.data
     filled_data.each do |form_item|
-      report = select_report form_item[:id]
+      report = field form_item.id
       if report.nil?
         report
       elsif form_item.form_media?
@@ -58,16 +68,18 @@ class Report < ActiveRecord::Base
   end
 
   def serialized_report_file(id)
-    report_file = ReportFile.find_by_id(id)
-    serialized = { name: report_file.file_file_name,
-                   content_type: report_file.file_content_type,
-                   url: report_file.file.url }
-    return serialized
+    { name: ReportFile.find(id).file_file_name,
+      content_type: report_file.file_content_type,
+      url: report_file.file.url }
   end
 
-  def select_report(id)
-    pure_data.select do |report_item|
-      report_item.report_id == id
-    end.first
+  def field(id)
+    pure_data.find do |report_field|
+      report_field.report_id == id
+    end
+  end
+
+  def required?(id)
+    form.field(id).required
   end
 end

@@ -13,7 +13,8 @@ class ReportDataValidator
              non_uniq_ids: "'id' fields aren't unique.",
              non_match_type: "one or more fields doesn't match form's field type.",
              non_present_req:"one or more required fields aren't present.",
-             non_exist_media: "one ore more 'media' fields doesn't exist on server." }.freeze
+             non_exist_media: "one or more 'media' fields doesn't exist on server.",
+             select_is_arr: "one or more 'select' fields aren't array" }.freeze
 
   ALLOWED_TYPES = {string: ['text', 'barcode', 'date_time'],
                    array: ['gps', 'select'],
@@ -25,7 +26,8 @@ class ReportDataValidator
     @report.errors[:base] << ERRORS[:non_uniq_ids] unless id_fields_are_unique?
     @report.errors[:base] << ERRORS[:non_match_type] unless fields_are_of_allowed_type?
     @report.errors[:base] << ERRORS[:non_present_req] unless required_fields_are_present?
-    @report.errors[:base] << ERRORS[:non_exist_media] unless media_fields_exists?
+    @report.errors[:base] << ERRORS[:non_exist_media] unless media_fields_match?
+    @report.errors[:base] << ERRORS[:select_is_arr] unless select_fields_contains_array?
   end
 
   def fields_contains_id?
@@ -67,14 +69,20 @@ class ReportDataValidator
     true unless false_table.include? false
   end
 
-  def media_fields_exists?
+  def media_fields_match?
     ids = @report.media_ids
-    exuals = ReportFile.where(id: ids).size == ids.size
-    exuals ? true : false
+    ReportFile.where(id: ids).size == ids.size
   end
 
   def required_fields_are_present?
     @form.required_ids.sort == @report.data_ids.sort
+  end
+
+  def select_fields_contains_array?
+    false_table = @report.select_data(true).map do |select|
+      false unless select.values.first.is_a?(Array)
+    end
+    true unless false_table.include? false
   end
 
   private

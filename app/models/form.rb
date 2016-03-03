@@ -16,28 +16,22 @@ class Form < ActiveRecord::Base
     end
 
     define_method "#{type}_ids" do
-      send("#{type}_data").map { |form_field| form_field[:id] }
+      send("#{type}_data").map(&:id)
     end
   end
 
   def field(id)
-    data.find { |form_field| form_field[:id] == id }
+    data.find { |form_field| form_field.id == id }
   end
 
-  # Reads order column and returns it with each element as an integer.
-  def order
-    stringified_order = read_attribute(:order)
-    return [] if stringified_order.nil? || stringified_order.empty?
+  # Reads array columns and returns it with each element as an integer.
+  %w(order groups).each do |collection|
+    define_method collection do
+      stringified = read_attribute collection
+      return [] if stringified.nil? || stringified.empty?
 
-    stringified_order.map(&:to_i)
-  end
-
-  # Reads group column and returns it with each element as an integer.
-  def groups
-    str_groups = read_attribute(:groups)
-    return [] if str_groups.nil? || str_groups.empty?
-
-    str_groups.map(&:to_i)
+      stringified.map(&:to_i)
+    end
   end
 
   # Reads data column, sorts it according to corresponding order column.
