@@ -85,21 +85,14 @@ module Convert
     def self.all
       old_organisations = OldVW::Organisation.all
       old_organisations.each { |organisation| single(organisation.id) }
-      return true
+      return true if old_organisations.size == NewVW::Organisation.all.size
     end
 
     def self.single(id)
       old_organisation = OldVW::Organisation.find(id)
-      new_paramaters = parameters_for(old_organisation)
-
-      if new_organisation = NewVW::Organisation.find_by_id(id)
-        new_organisation.update_attributes(new_paramaters)
-        new_organisation.save
-      else
-        new_organisation = NewVW::Organisation.new
-        new_organisation.update_attributes(new_paramaters)
-        new_organisation.save
-      end
+      new_parameters = parameters_for(old_organisation)
+      new_organisation = NewVW::Organisation.find_or_create_by(id: id)
+      new_organisation.update_attributes(new_parameters)
     end
 
     private
@@ -117,24 +110,14 @@ module Convert
     def self.all
       old_groups = OldVW::Group.all
       old_groups.each { |group| single(group.id) }
-      if OldVW::Group.all.size == NewVW::Group.all.size
-        true
-      else
-        false
-      end
+      return true if old_groups.size == NewVW::Group.all.size
     end
 
     def self.single(id)
       old_group = OldVW::Group.find(id)
       new_parameters = parameters_for(old_group)
-
-      if new_group = NewVW::Group.find_by_id(id)
-        new_group.update_attributes(new_parameters)
-        new_group.save
-      else
-        new_group = NewVW::Group.create(new_parameters)
-        new_group.save
-      end
+      new_group = NewVW::Group.find_or_create_by(id: id)
+      new_group.update_attributes(new_parameters)
     end
 
     private
@@ -153,25 +136,14 @@ module Convert
     def self.all
       old_users = OldVW::User.all
       old_users.each { |user| single(user.id) }
-      if OldVW::User.all.size == NewVW::User.all.size
-        true
-      else
-        false
-      end
+      return true if old_users.size == NewVW::User.all.size
     end
 
     def self.single(id)
       old_user = OldVW::User.find(id)
       new_parameters = parameters_for(old_user)
-
-      if new_user = NewVW::User.find_by(id: id)
-        new_user.update_attributes(new_parameters)
-        new_user.save
-      else
-        new_user = NewVW::User.new
-        new_user.update_attributes(new_parameters)
-        new_user.save
-      end
+      new_user = NewVW::User.find_or_create_by(id: id)
+      new_user.update_attributes(new_parameters)
     end
 
     private
@@ -195,11 +167,7 @@ module Convert
     def self.all
       old_forms = OldVW::Form.all
       old_forms.each { |form| single(form.id) }
-      if OldVW::Form.all.size == NewVW::Form.all.size
-        true
-      else
-        false
-      end
+      return true if old_forms.size == NewVW::Form.all.size
     end
 
     def self.single(id)

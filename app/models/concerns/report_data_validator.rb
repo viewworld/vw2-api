@@ -14,7 +14,7 @@ class ReportDataValidator
              non_match_type: "one or more fields doesn't match form's field type.",
              non_present_req:"one or more required fields aren't present.",
              non_exist_media: "one or more 'media' fields doesn't exist on server.",
-             select_is_arr: "one or more 'select' fields aren't array" }.freeze
+             empty_select: " 'select' are empty." }.freeze
 
   ALLOWED_TYPES = {string: ['text', 'barcode', 'date_time'],
                    array: ['gps', 'select'],
@@ -27,7 +27,7 @@ class ReportDataValidator
     @report.errors[:base] << ERRORS[:non_match_type] unless fields_are_of_allowed_type?
     @report.errors[:base] << ERRORS[:non_present_req] unless required_fields_are_present?
     @report.errors[:base] << ERRORS[:non_exist_media] unless media_fields_match?
-    @report.errors[:base] << ERRORS[:select_is_arr] unless select_fields_contains_array?
+    @report.errors[:base] << empty_select_fields unless empty_select_fields.nil?
   end
 
   def fields_contains_id?
@@ -53,8 +53,13 @@ class ReportDataValidator
   def fields_are_of_allowed_type?
     false_table = @report_data.map do |report_field|
       form_field = @form.field report_field.report_id
-      report_value_type = report_field.report_value_type
-      false unless ALLOWED_TYPES[report_value_type].include? form_field[:type]
+      allowed = ALLOWED_TYPES[report_field.report_value_type]
+      if allowed.nil?
+        false
+      elsif allowed.include?(form_field.type)
+      else
+        false
+      end
     end
     true unless false_table.include? false
   end
@@ -78,11 +83,11 @@ class ReportDataValidator
     @form.required_ids.sort == @report.data_ids.sort
   end
 
-  def select_fields_contains_array?
-    false_table = @report.select_data(true).map do |select|
-      false unless select.values.first.is_a?(Array)
+  def empty_select_fields
+    false_table = @report.select_data.map do |select|
+      false if select.values.first && select.values.first.empty?
     end
-    true unless false_table.include? false
+    false_table.empty? ? nil : "#{false_table.size.to_s} 'select' fields are empty"
   end
 
   private
