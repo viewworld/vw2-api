@@ -31,12 +31,6 @@ module Refinements
   end
 end
 
-module HashExtensions
-  refine Hash do
-#    include ::Refinements
-  end
-end
-
 class Hash
   include ::Refinements
 end

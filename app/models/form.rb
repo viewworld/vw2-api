@@ -1,5 +1,4 @@
 class Form < ActiveRecord::Base
-  using HashExtensions
 
   acts_as_paranoid
   before_save :check_or_update_order
