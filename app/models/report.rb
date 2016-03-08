@@ -1,5 +1,5 @@
 class Report < ActiveRecord::Base
-
+  belongs_to :user
   belongs_to :form
   delegate :organisation, to: :form, allow_nil: true
 

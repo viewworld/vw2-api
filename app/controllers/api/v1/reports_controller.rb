@@ -15,6 +15,7 @@ class Api::V1::ReportsController < ApplicationController
 
   # POST /forms/:id/reports
   def create
+    @report.user_id = @current_user.id
     if @report.save
       render json: @report, status: 201
     else

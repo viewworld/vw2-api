@@ -1,10 +1,11 @@
 class ReportSerializer < ActiveModel::Serializer
   include NullAttributesRemover
-  attributes :id, :form_id, :data
+  attributes :id, :form_id, :metadata, :data
 
-  def form_data
-    data = object.form.data.dup
-    data.delete('order')
-    data
+  def metadata
+    {
+      "created_at" => object.created_at,
+      "user_id" => object.try(:user_id)
+    }
   end
 end

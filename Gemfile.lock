@@ -45,7 +45,7 @@ GEM
       thread_safe
     arel (6.0.3)
     ast (2.2.0)
-    bcrypt (3.1.10)
+    bcrypt (3.1.11)
     braintree (2.58.0)
       builder (>= 2.0.0)
     braintree-rails (1.4.1)
@@ -212,7 +212,7 @@ GEM
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.0.3)
+    sprockets-rails (3.0.4)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)

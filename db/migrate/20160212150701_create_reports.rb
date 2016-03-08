@@ -3,7 +3,7 @@ class CreateReports < ActiveRecord::Migration
     create_table :reports do |t|
       t.references :form, index: true, foreign_key: true
       t.jsonb :data
-
+      t.references :user, index: true, foreign_key: true
       t.timestamps null: false
     end
     add_index :reports, :data, using: :gin

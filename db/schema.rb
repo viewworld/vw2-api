@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211135059) do
+ActiveRecord::Schema.define(version: 20160308142830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,12 +66,32 @@ ActiveRecord::Schema.define(version: 20160211135059) do
   create_table "reports", force: :cascade do |t|
     t.integer  "form_id"
     t.jsonb    "data"
+    t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   add_index "reports", ["data"], name: "index_reports_on_data", using: :gin
   add_index "reports", ["form_id"], name: "index_reports_on_form_id", using: :btree
+  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
+
+  create_table "signatures", force: :cascade do |t|
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+  end
+
+  create_table "uploads", force: :cascade do |t|
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email"
@@ -80,6 +100,7 @@ ActiveRecord::Schema.define(version: 20160211135059) do
     t.string   "last_name"
     t.string   "password_digest"
     t.string   "timezone_name"
+    t.string   "time_zone"
     t.integer  "role",            default: 3
     t.integer  "group_id"
     t.datetime "created_at"
@@ -92,5 +113,6 @@ ActiveRecord::Schema.define(version: 20160211135059) do
   add_foreign_key "forms", "organisations"
   add_foreign_key "groups", "organisations"
   add_foreign_key "reports", "forms"
+  add_foreign_key "reports", "users"
   add_foreign_key "users", "groups"
 end

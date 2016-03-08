@@ -16,12 +16,11 @@ class FormDataValidator < ActiveModel::Validator
                      select
                      numeric
                      date_time
-                     custom_upload
-                     barcode
+                     upload
                      gps
                      page_break
                      branching
-                     calculation).freeze
+                     signature).freeze
 
   def validate
     @form.errors[:base] << ERRORS[0] unless fields_contains_id?
