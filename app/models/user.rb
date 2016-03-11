@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 
   belongs_to :group
   has_many :reports
+  has_many :logs
 
   delegate :organisation, to: :group, allow_nil: true
   delegate :forms, to: :organisation, allow_nil: true

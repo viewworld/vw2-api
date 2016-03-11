@@ -11,7 +11,7 @@ class CreateForms < ActiveRecord::Migration
       t.text :order, array: true, default: []
       t.datetime :deleted_at, index: true
       t.references :organisation, index: true, foreign_key: true
-
+      t.references :user, index: true, foreign_key: true
       t.timestamps null: false
     end
     add_index :forms, :data, using: :gin

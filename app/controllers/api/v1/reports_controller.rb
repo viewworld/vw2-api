@@ -5,7 +5,9 @@ class Api::V1::ReportsController < ApplicationController
 
   # GET /forms/:id/reports
   def index
-    render json: @reports, status: 200
+    render json: @reports,
+           each_serializer: ReportSerializer,
+           status: 200
   end
 
   # GET /forms/:id/reports/:id

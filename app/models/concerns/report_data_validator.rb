@@ -1,5 +1,5 @@
 class ReportDataValidator
-  using HashExtensions
+  # using HashExtensions
 
   def initialize(report)
     @report = report
@@ -13,8 +13,7 @@ class ReportDataValidator
              non_uniq_ids: "'id' fields aren't unique.",
              non_match_type: "one or more fields doesn't match form's field type.",
              non_present_req:"one or more required fields aren't present.",
-             non_exist_media: "one or more 'media' fields doesn't exist on server.",
-             empty_select: " 'select' are empty." }.freeze
+             non_exist_media: "one or more 'media' fields doesn't exist on server."}.freeze
 
   ALLOWED_TYPES = {string: ['text', 'barcode', 'date_time'],
                    array: ['gps', 'select'],
@@ -27,7 +26,7 @@ class ReportDataValidator
     @report.errors[:base] << ERRORS[:non_match_type] unless fields_are_of_allowed_type?
     @report.errors[:base] << ERRORS[:non_present_req] unless required_fields_are_present?
     @report.errors[:base] << ERRORS[:non_exist_media] unless media_fields_match?
-    @report.errors[:base] << empty_select_fields unless empty_select_fields.nil?
+    #@report.errors[:base] << empty_select_fields unless empty_select_fields.nil?
   end
 
   def fields_contains_id?
@@ -88,6 +87,12 @@ class ReportDataValidator
       false if select.values.first && select.values.first.empty?
     end
     false_table.empty? ? nil : "#{false_table.size.to_s} 'select' fields are empty"
+  end
+
+  # TODO
+  def select_match_form
+    form_selects = @form.select_data
+    return nil if form_selects.nil? || form_selects.empty?
   end
 
   private

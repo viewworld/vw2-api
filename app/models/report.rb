@@ -1,10 +1,21 @@
 class Report < ActiveRecord::Base
+  enum status: ['verified', 'submitted']
   belongs_to :user
   belongs_to :form
   delegate :organisation, to: :form, allow_nil: true
 
+  after_create :create_log
+
   validate do |report|
     ReportDataValidator.new(report).validate
+  end
+
+  def create_log
+    log = { user: user,
+            subject: self,
+            activity: "Added new observation '#{form.name}'" }
+
+    CreateLogJob.perform_later log
   end
 
   def data_ids
@@ -42,7 +53,7 @@ class Report < ActiveRecord::Base
       if report.nil?
         report
       elsif form_item.form_media?
-        report = serialized_report_file(report.report_value)
+        report = serialized_report_file(report['assetId'])
       else
         report = report.report_value
       end

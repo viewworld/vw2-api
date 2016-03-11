@@ -35,7 +35,7 @@ gem 'rack-cors'
 gem 'uuid'
 gem 'responders'
 gem 'paranoia'
-
+gem 'graphql'
 gem 'appsignal'
 
 group :development, :test do

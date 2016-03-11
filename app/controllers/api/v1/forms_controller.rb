@@ -9,6 +9,12 @@ class Api::V1::FormsController < ApplicationController
            each_serializer: FormsSerializer
   end
 
+  def index_with_reports
+    render json: @forms,
+           status: 200,
+           each_serializer: ReportsSerializer
+  end
+
   # GET /forms/:id
   def show
     render json: @form, status: 200

@@ -5,6 +5,7 @@ class CreateReports < ActiveRecord::Migration
       t.jsonb :data
       t.references :user, index: true, foreign_key: true
       t.timestamps null: false
+      t.integer :status
     end
     add_index :reports, :data, using: :gin
   end

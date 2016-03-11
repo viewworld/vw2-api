@@ -1,12 +1,21 @@
 class Form < ActiveRecord::Base
-
   acts_as_paranoid
+  belongs_to :user
   before_save :check_or_update_order
   belongs_to :organisation
-  has_many :reports
+  has_many :reports, dependent: :destroy
+
+  after_create :create_log
 
   validate do |form|
     FormDataValidator.new(form).validate
+  end
+
+  def create_log
+    Log.create(
+      user: user,
+      subject: self,
+      activity: "Added new form '#{name}'")
   end
 
   %w(media text select required).each do |type|
@@ -59,6 +68,6 @@ class Form < ActiveRecord::Base
   # Lists only id and title from each data item.
   def basic_data
     unordered = data.map { |item| item.slice(:id, :title, :type) }
-    unordered.sort_by { |item| order.index(item[:id]) }
+   # unordered.sort_by { |item| order.index(item[:id]) }
   end
 end

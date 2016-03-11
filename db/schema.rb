@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308142830) do
+ActiveRecord::Schema.define(version: 20160309144203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20160308142830) do
     t.text     "order",                 default: [],                      array: true
     t.datetime "deleted_at"
     t.integer  "organisation_id"
+    t.integer  "user_id"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
   end
@@ -34,6 +35,7 @@ ActiveRecord::Schema.define(version: 20160308142830) do
   add_index "forms", ["data"], name: "index_forms_on_data", using: :gin
   add_index "forms", ["deleted_at"], name: "index_forms_on_deleted_at", using: :btree
   add_index "forms", ["organisation_id"], name: "index_forms_on_organisation_id", using: :btree
+  add_index "forms", ["user_id"], name: "index_forms_on_user_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -45,6 +47,17 @@ ActiveRecord::Schema.define(version: 20160308142830) do
 
   add_index "groups", ["organisation_id"], name: "index_groups_on_organisation_id", using: :btree
   add_index "groups", ["parent_id"], name: "index_groups_on_parent_id", using: :btree
+
+  create_table "logs", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "subject_id",   null: false
+    t.string   "subject_type", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "activity"
+  end
+
+  add_index "logs", ["user_id"], name: "index_logs_on_user_id", using: :btree
 
   create_table "organisations", force: :cascade do |t|
     t.string   "name"
@@ -69,6 +82,7 @@ ActiveRecord::Schema.define(version: 20160308142830) do
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "status"
   end
 
   add_index "reports", ["data"], name: "index_reports_on_data", using: :gin
@@ -111,7 +125,9 @@ ActiveRecord::Schema.define(version: 20160308142830) do
   add_index "users", ["group_id"], name: "index_users_on_group_id", using: :btree
 
   add_foreign_key "forms", "organisations"
+  add_foreign_key "forms", "users"
   add_foreign_key "groups", "organisations"
+  add_foreign_key "logs", "users"
   add_foreign_key "reports", "forms"
   add_foreign_key "reports", "users"
   add_foreign_key "users", "groups"

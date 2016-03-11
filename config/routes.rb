@@ -13,6 +13,8 @@ Rails.application.routes.draw do
         resources :reports
         resources :report_files, only: [:show, :create]
       end
+      get 'reports', to: 'forms#index_with_reports'
+      post 'query', to: 'queries#create'
       resources :transactions, only: :create
       resources :organisations do
         resources :payment_methods
